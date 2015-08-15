@@ -4,14 +4,14 @@
 		<!--
 			@@ versioning guide
 			nuget-version : [major].[minor](.[bugfix])(-[stage]) bugfix and stage is optional
-			assembly-version : [nuget-version]__[build number]
+			assembly-version : [major].[minor].[bugfix].[build number]
 			stage : 1.2-alpha then 'alpha', 3.4.5-beta then 'beta'   in release stage, stage_tag is '' (empty)
 			
 			(if build number in AppVeyor is 987)
 			nupkg-version |	assembly-version  | tag
-			1.2			  |	1.2__987		  | version:'1.2'	stage:''
-			1.2.3		  | 1.2.3__987		  | version:'1.2.3'	stage:''
-			1.2-alpha	  | 1.2-alpha__987	  | version:'1.2' 	stage:'alpha'
+			1.2			  |	1.2.0.987		  | version:'1.2'	stage:''
+			1.2.3		  | 1.2.3.987		  | version:'1.2.3'	stage:''
+			1.2-alpha	  | 1.2.0.987		  | version:'1.2' 	stage:'alpha'
 			
 			Publish to nuget runs on master branch only. If merge to master, changing version is needed.
 			AssemblyInfo is overwritten with 'assembly-version'
