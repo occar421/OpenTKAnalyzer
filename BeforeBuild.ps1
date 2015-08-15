@@ -20,6 +20,7 @@ $metadataNode = $xml.SelectSingleNode('/ns:package/ns:metadata', $ns)
 $stageNode = $metadataNode.SelectSingleNode('ns:stage', $ns)
 $metadataNode.RemoveChild($stageNode) | Out-Null
 
-$xml.Save($nuspec.FullName + "aa")
+$xml.Save($nuspec.FullName)
 
-rd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" /s /q
+#rd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" /s /q
+Remove-Item "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" -Recurse -Force
