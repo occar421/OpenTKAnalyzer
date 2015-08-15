@@ -1,24 +1,8 @@
 ﻿<?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<!--
-			@@ versioning guide
-			nuget-version : [major].[minor](.[bugfix])(-[stage]) bugfix and stage is optional
-			assembly-version : [major].[minor].[bugfix].[build number]
-			stage : 1.2-alpha then 'alpha', 3.4.5-beta then 'beta'   in release stage, stage_tag is '' (empty)
-			
-			(if build number in AppVeyor is 987)
-			nupkg-version |	assembly-version  | tag
-			1.2			  |	1.2.0.987		  | version:'1.2'	stage:''
-			1.2.3		  | 1.2.3.987		  | version:'1.2.3'	stage:''
-			1.2-alpha	  | 1.2.0.987		  | version:'1.2' 	stage:'alpha'
-			
-			Publish to nuget runs on master branch only. If merge to master, changing version is needed.
-			AssemblyInfo is overwritten with 'assembly-version'
-		-->
 		<id>OpenTKAnalyzer</id>
-		<version>0.0</version>
-		<stage>prealpha</stage>
+		<version>$version$</version>
 		<title>OpenTKAnalyzer</title>
 		<authors>MasuqaT</authors>
 		<owners>MasuqaT.NET</owners>
@@ -29,7 +13,7 @@
 		<description>Analyzer for OpenTK (unofficial)</description>
 		<releaseNotes>Not Avaliable</releaseNotes>
 		<copyright>Copyright 2015 MasuqaT</copyright>
-		<tags>OpenTK, OpenTK Analyzer, analyzers</tags>
+		<tags>OpenTK, OpenTKAnalyzer, analyzers</tags>
 	</metadata>
 	<!-- The convention for analyzers is to put language agnostic dlls in analyzers\dotnet and language specific analyzers in either analyzers\dotnet\cs or analyzers\dotnet\vb -->
 	<files>
