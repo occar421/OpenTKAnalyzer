@@ -1,4 +1,0 @@
-version: 0.0.0.{build}-prealpha
-
-build:
-  project: src/OpenTKAnalyzer.sln
