@@ -7,12 +7,13 @@ if(-not [String]::IsNullOrEmpty($stage)){
 }
 
 $nupkgVersion = $number + $stage
-if(($number | Select-String "\." -AllMatches).Matches.Count -eq 2){
+if(($number | Select-String "\." -AllMatches).Matches.Count -eq 1){
     $number = $number + ".0"
 }
 $assemblyVersion = $number + "." + $env:APPVEYOR_BUILD_NUMBER
 
 $env:APPVEYOR_BUILD_VERSION = $assemblyVersion
+$env:APPVEYOR_BUILD_NUMBER = $assemblyVersion
 $xml.package.metadata.version = $nupkgVersion
 
 
