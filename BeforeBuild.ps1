@@ -12,6 +12,14 @@ $assemblyVersion = $nupkgVersion + "__" + $env:APPVEYOR_BUILD_NUMBER
 $env:APPVEYOR_BUILD_VERSION = $assemblyVersion
 
 $xml.package.metadata.version = $nupkgVersion
-$xml.Save($nuspec.FullName)
+
+
+$ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+$ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI)
+$metadataNode = $xml.SelectSingleNode('/ns:package/ns:metadata', $ns)
+$stageNode = $metadataNode.SelectSingleNode('ns:stage', $ns)
+$metadataNode.RemoveChild($stageNode) | Out-Null
+
+$xml.Save($nuspec.FullName + "aa")
 
 rd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" /s /q
