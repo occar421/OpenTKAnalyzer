@@ -49,7 +49,7 @@ before_build:
     $xml.Save($nuspec.FullName)
 
 
-    nuget restore
+    nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + $env:solution_path)
 
 
 
