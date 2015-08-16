@@ -57,7 +57,7 @@ before_build:
 build:
   project: $(solution_path)
   publish_nuget: true
-  verbosity: minimal
+  verbosity: detailed
 deploy:
 - provider: NuGet
   api_key:
