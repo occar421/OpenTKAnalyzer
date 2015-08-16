@@ -13,5 +13,16 @@ develop:[![Build status(develop)](https://img.shields.io/appveyor/ci/occar421/op
 ## Description
 This analyzer improves your OpenTK code (fewer bug and guide).  
 
+## Versioning
+<dl>
+    <dt>nupkg</dt>
+    <dd>[major].[minor](.[revision])(-[stage])</dd>
+    <dd>1.2-alpha, 3.4.5-beta, 6.7</dd>
+	<dt>assembly</dt>
+	<dd>[major].[minor].[revision].[build]</dd>
+    <dd>1.2.0.1, 3.4.5.2, 6.7.0.3</dd>
+</dl>
+Publish to nuget runs only on master branch. When commit(merge) to master, changeing version is required.
+
 ## Development Envirionment
 Visual Studio Community 2015 (on Windows 10 Pro)
