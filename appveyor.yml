@@ -5,7 +5,10 @@ assembly_info:
   assembly_version: '{version}'
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
+environment:
+  solution_path: src/OpenTKAnalyzer.sln
 before_build:
+
 - ps: >-
     $VERSION = $env:APPVEYOR_BUILD_VERSION
 
@@ -53,9 +56,13 @@ before_build:
     "nupkgVersion : " + $nupkgVersion
 
 
+    nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + $env:solution_path)
+
+
+
     Remove-Item "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" -Recurse -Force
 build:
-  project: src/OpenTKAnalyzer.sln
+  project: $(solution_path)
   publish_nuget: true
   verbosity: minimal
 deploy:
