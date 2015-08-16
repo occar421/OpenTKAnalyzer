@@ -13,7 +13,6 @@ environment:
 install:
 - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 before_build:
-
 - ps: >-
     $VERSION = $env:APPVEYOR_BUILD_VERSION
 
@@ -32,15 +31,7 @@ before_build:
 
     $vs = $VERSION -split "\."
 
-    if($vs[2] -eq 0){
-        $nupkgVersion = $vs[0] + "." + $vs[1]
-    }
-
-    elseif($vs[2] -gt 0)
-
-    {
-        $nupkgVersion = $vs[0] + "." + $vs[1] + "." + $vs[2]
-    }
+    $nupkgVersion = $vs[0] + "." + $vs[1] + "." + $vs[2]
 
     if($STAGE -ne $RELEASE){
         $nupkgVersion = $nupkgVersion + "-" + $STAGE
@@ -58,10 +49,7 @@ before_build:
     $xml.Save($nuspec.FullName)
 
 
-    "nupkgVersion : " + $nupkgVersion
-
-
-    nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + $env:solution_path)
+    nuget restore
 
 
 
