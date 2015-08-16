@@ -54,6 +54,7 @@ before_build:
 
 
     $env:CONFIGURATION
+
     nuget restore ($env:CONFIGURATION.build.project)
 
 
