@@ -4,9 +4,41 @@ assembly_info:
   file: '**\AssemblyInfo.*'
   assembly_version: '{version}'
   assembly_file_version: '{version}'
-  assembly_informational_version: '{version}-prealpha'
+  assembly_informational_version: '{version}'
 before_build:
-- rd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" /s /q
+- ps: >-
+    $VERSION = $env:APPVEYOR_BUILD_VERSION
+    $ALPHA = "alpha"
+    $BETA = "beta"
+    $RELEASE = "release"
+
+    ## stage ##
+    $STAGE = $ALPHA
+    ###########
+
+    $vs = $VERSION -split "\."
+    if($vs[2] -eq 0){
+        $nupkgVersion = $vs[0] + "." + $vs[1]
+    }
+    elseif($vs[2] -gt 0)
+    {
+        $nupkgVersion = $vs[0] + "." + $vs[1] + "." + $vs[2]
+    }
+
+    if($STAGE -ne $RELEASE){
+        $nupkgVersion = $nupkgVersion + "-" + $STAGE
+    }
+
+    # rewrite
+    $nuspec = (ls $env:APPVEYOR_BUILD_FOLDER -Recurse).Where{ $_.Extension -eq ".nuspec"} | Select -First 1
+    [xml]$xml = Get-Content $nuspec.FullName
+    $xml.package.metadata.version = $nupkgVersion
+    $xml.Save($nuspec.FullName)
+
+    "nupkgVersion : " + $nupkgVersion
+    
+
+    Remove-Item "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" -Recurse -Force
 build:
   project: src/OpenTKAnalyzer.sln
   publish_nuget: true
