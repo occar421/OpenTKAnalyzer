@@ -53,7 +53,8 @@ before_build:
     "nupkgVersion : " + $nupkgVersion
 
 
-    nuget restore ($env:CONFIGURATION.project)
+    $env:CONFIGURATION
+    nuget restore ($env:CONFIGURATION.build.project)
 
 
 
