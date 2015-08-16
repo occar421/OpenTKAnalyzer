@@ -55,9 +55,8 @@ before_build:
 
     "nupkgVersion : " + $nupkgVersion
 
-    $env:solution_path
 
-    nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + "src/OpenTKAnalyzer.sln")
+    nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + $env:solution_path)
 
 
 
