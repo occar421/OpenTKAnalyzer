@@ -14,6 +14,8 @@ develop:[![Build status(develop)](https://img.shields.io/appveyor/ci/occar421/op
 This analyzer improves your OpenTK code (fewer bug and guide).  
 
 ## Versioning
+In appveyor.yml line 1, version is defined. And stage(alpha, beta etc...) is before_build script.
+### format
 <dl>
     <dt>nupkg</dt>
     <dd>[major].[minor](.[revision])(-[stage])</dd>
@@ -22,7 +24,8 @@ This analyzer improves your OpenTK code (fewer bug and guide).
 	<dd>[major].[minor].[revision].[build]</dd>
     <dd>1.2.0.1, 3.4.5.2, 6.7.0.3</dd>
 </dl>
-Publish to nuget runs only on master branch. When commit(merge) to master, changeing version is required.
+Change them when we make release branch.  
+Publish to nuget runs only on master branch.
 
 ## Development Envirionment
 Visual Studio Community 2015 (on Windows 10 Pro)
