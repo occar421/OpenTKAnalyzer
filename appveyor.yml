@@ -14,43 +14,7 @@ install:
 - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 before_build:
 - ps: >-
-    $VERSION = $env:APPVEYOR_BUILD_VERSION
-
-    $ALPHA = "alpha"
-
-    $BETA = "beta"
-
-    $RELEASE = "release"
-
-    ## stage ##
-
-    $STAGE = $ALPHA
-
-    ###########
-
-
-    $vs = $VERSION -split "\."
-
-    $nupkgVersion = $vs[0] + "." + $vs[1] + "." + $vs[2]
-
-    if($STAGE -ne $RELEASE){
-        $nupkgVersion = $nupkgVersion + "-" + $STAGE
-    }
-
-
-    # rewrite
-
-    $nuspec = (ls $env:APPVEYOR_BUILD_FOLDER -Recurse).Where{ $_.Extension -eq ".nuspec"} | Select -First 1
-
-    [xml]$xml = Get-Content $nuspec.FullName
-
-    $xml.package.metadata.version = $nupkgVersion
-
-    $xml.Save($nuspec.FullName)
-
-
     nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + $env:solution_path)
-
 
 
     Remove-Item "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" -Recurse -Force
