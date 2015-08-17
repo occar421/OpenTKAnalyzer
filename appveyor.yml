@@ -59,11 +59,9 @@ build:
   verbosity: minimal
 after_build:
 - ps: >-
-    $folder = $env:APPVEYOR_BUILD_FOLDER + "\" + $env:solution_path
+    $folder = $env:APPVEYOR_BUILD_FOLDER + "\" + ($env:solution_path -split "\.")[0]
 
-    (Get-ChildItem $folder -Recurse).Where{ $_.Extension -eq ".nupkg"}.ForEach{
-        Push-AppveyorArtifact $_.FullName -FileName $_.Name
-    }
+    (Get-ChildItem $folder -Recurse).Where{ $_.Extension -eq ".nupkg"} | %{ Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 deploy:
 - provider: NuGet
   api_key:
