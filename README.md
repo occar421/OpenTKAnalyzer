@@ -18,11 +18,11 @@ In appveyor.yml line 1, version is defined. And stage(alpha, beta etc...) is bef
 ### format
 <dl>
     <dt>nupkg</dt>
-    <dd>[major].[minor](.[revision])(-[stage])</dd>
-    <dd>1.2-alpha, 3.4.5-beta, 6.7</dd>
+    <dd>[major].[minor].[revision](-[stage])</dd>
+    <dd>1.2.0-alpha, 3.4.5-beta, 6.7.8</dd>
 	<dt>assembly</dt>
 	<dd>[major].[minor].[revision].[build]</dd>
-    <dd>1.2.0.1, 3.4.5.2, 6.7.0.3</dd>
+    <dd>1.2.0.1, 3.4.5.2, 6.7.8.3</dd>
 </dl>
 Change them when we make release branch.  
 Publish to nuget runs only on master branch.
