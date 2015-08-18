@@ -59,6 +59,7 @@ namespace OpenTKAnalyzer.OpenTK_
 				return;
 			}
 
+			double result;
 			// MathHelper
 			if (invotation.GetFirstToken().ValueText == nameof(MathHelper))
 			{
@@ -68,7 +69,6 @@ namespace OpenTKAnalyzer.OpenTK_
 					case nameof(MathHelper.DegreesToRadians):
 						{
 							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							double result;
 							if (double.TryParse(literal?.Token.ValueText, out result))
 							{
 								// perhaps degree value under 2PI is incorrect
@@ -86,13 +86,13 @@ namespace OpenTKAnalyzer.OpenTK_
 							}
 						}
 						break;
+
 					case nameof(MathHelper.RadiansToDegrees):
 						{
 							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							double result;
 							if (double.TryParse(literal?.Token.ValueText, out result))
 							{
-								// degree value usually under 2PI
+								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
 								{
 									context.ReportDiagnostic(Diagnostic.Create(
