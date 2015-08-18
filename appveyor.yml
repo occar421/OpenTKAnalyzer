@@ -6,7 +6,7 @@ branches:
   - /release\/.+/
   - /hotfix\/.+/
   - /support\/.+/
-os: Visual Studio 2015 RC
+os: Visual Studio 2015
 configuration: AppVeyor_NuGet
 platform: Any CPU
 assembly_info:
