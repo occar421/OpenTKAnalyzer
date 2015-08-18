@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace OpenTKAnalyzer.OpenTK
+namespace OpenTKAnalyzer.OpenTK_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
 	class RotationValueOpenTKMathAnalyzer : DiagnosticAnalyzer
