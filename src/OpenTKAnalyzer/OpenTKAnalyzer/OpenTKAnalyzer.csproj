@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OpenTK\Graphics\OpenGL\BeginEndAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +71,7 @@
       <HintPath>..\..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>False</Private>

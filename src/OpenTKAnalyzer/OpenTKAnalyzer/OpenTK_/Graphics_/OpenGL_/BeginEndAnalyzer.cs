@@ -5,8 +5,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using OpenTK.Graphics.OpenGL;
 
-namespace OpenTKAnalyzer.OpenTK.Graphics.OpenGL
+namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
 	class BeginEndAnalyzer : DiagnosticAnalyzer
@@ -16,7 +17,7 @@ namespace OpenTKAnalyzer.OpenTK.Graphics.OpenGL
 		private const string Title = "GL.Begin and GL.End comformity";
 		private const string MessageFormat = "Missing {0}.";
 		private const string Description = "";
-		private const string Category = "OpenTKAnalyzer:OpenGL";
+		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
 		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
 			id: DiagnosticId,
@@ -38,7 +39,7 @@ namespace OpenTKAnalyzer.OpenTK.Graphics.OpenGL
 		{
 			// filtering
 			if (context.CodeBlock.Ancestors().OfType<UsingDirectiveSyntax>()
-				.Where(u => u.Name.NormalizeWhitespace().ToFullString() == "OpenTK.Graphics.OpenGL").Any())
+				.Where(u => u.Name.NormalizeWhitespace().ToFullString() == nameof(OpenTK) + "." + nameof(OpenTK.Graphics) + "." + nameof(OpenTK.Graphics.OpenGL)).Any())
 			{
 				return;
 			}
@@ -61,7 +62,7 @@ namespace OpenTKAnalyzer.OpenTK.Graphics.OpenGL
 				var statements = node.ChildNodes().OfType<ExpressionStatementSyntax>();
 				var invocations = statements.Select(s => s.Expression).OfType<InvocationExpressionSyntax>();
 				var glOperators = invocations.Select(i => i.Expression).OfType<MemberAccessExpressionSyntax>()
-					.Where(m => m.IsKind(SyntaxKind.SimpleMemberAccessExpression)).Where(s => s.GetFirstToken().Text == "GL");
+					.Where(m => m.IsKind(SyntaxKind.SimpleMemberAccessExpression)).Where(s => s.GetFirstToken().Text == nameof(GL));
 
 				// filtering
 				if (!glOperators.Any())
@@ -74,28 +75,28 @@ namespace OpenTKAnalyzer.OpenTK.Graphics.OpenGL
 				foreach (var op in glOperators)
 				{
 					var opName = op.ChildNodes().Skip(1).First().GetFirstToken().Text;
-					if (opName == "Begin")
+					if (opName == nameof(GL.Begin))
 					{
 						counter++;
 						if (counter > 1)
 						{
-							Diagnostics.Add(Diagnostic.Create(Rule, op.Parent.GetLocation(), "GL.End"));
+							Diagnostics.Add(Diagnostic.Create(Rule, op.Parent.GetLocation(), nameof(GL) + "." + nameof(GL.Begin)));
 							counter = 1;
 						}
 					}
-					else if (opName == "End")
+					else if (opName == nameof(GL.End))
 					{
 						counter--;
 						if (counter < 0)
 						{
-							Diagnostics.Add(Diagnostic.Create(Rule, op.Parent.GetLocation(), "GL.Begin"));
+							Diagnostics.Add(Diagnostic.Create(Rule, op.Parent.GetLocation(), nameof(GL) + "." + nameof(GL.Begin)));
 							counter = 0;
 						}
 					}
 				}
 				if (counter > 1)
 				{
-					Diagnostics.Add(Diagnostic.Create(Rule, glOperators.Last().Parent.GetLocation(), "GL.End"));
+					Diagnostics.Add(Diagnostic.Create(Rule, glOperators.Last().Parent.GetLocation(), nameof(GL) + "." + nameof(GL.End)));
 				}
 
 				base.VisitBlock(node);
