@@ -183,6 +183,28 @@ namespace OpenTKAnalyzer.OpenTK_
 				}
 				return;
 			}
+
+			// Quartanion
+			if (baseName.StartsWith(nameof(Quaternion)))
+			{
+				var methodName = invotation.Expression.GetLastToken().ValueText;
+				if (methodName == nameof(Quaternion.FromAxisAngle))
+				{
+					// literal is in second argument
+					var literal = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression as LiteralExpressionSyntax;
+					if (double.TryParse(literal?.Token.ValueText, out result))
+					{
+						// radian value usually under 2PI
+						if (Math.Abs(result) >= 2 * Math.PI)
+						{
+							context.ReportDiagnostic(Diagnostic.Create(
+								descriptor: WarningRule,
+								location: literal.GetLocation(),
+								messageArgs: new[] { baseName + "." + methodName, RadianString }));
+						}
+					}
+				}
+			}
 		}
 	}
 }
