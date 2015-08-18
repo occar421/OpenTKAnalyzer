@@ -17,9 +17,12 @@ namespace OpenTKAnalyzer.OpenTK
 		public const string DiagnosticId = "RotatinoValueOpenTKMath";
 
 		private const string Title = "Rotation value(OpenTK Math)";
-		private const string MessageFormat = "{0} accepts radian values.";
-		private const string Description = "Warm on literal in argument seems degree.";
+		private const string MessageFormat = "{0} accepts {1} values.";
+		private const string Description = "Warm on literal in argument seems invalid style(radian or degree).";
 		private const string Category = "OpenTKAnalyzer:OpenTK";
+
+		private const string RadianString = "radian";
+		private const string DegreeString = "degree";
 
 		internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(
 			id: DiagnosticId,
