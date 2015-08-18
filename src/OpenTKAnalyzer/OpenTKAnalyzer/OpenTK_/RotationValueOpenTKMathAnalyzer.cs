@@ -18,7 +18,7 @@ namespace OpenTKAnalyzer.OpenTK_
 		public const string DiagnosticId = "RotatinoValueOpenTKMath";
 
 		private const string Title = "Rotation value(OpenTK Math)";
-		private const string MessageFormat = "{0} accepts {1} values.";
+		private const string MessageFormat = "{0} accepts {1} value.";
 		private const string Description = "Warm on literal in argument seems invalid style(radian or degree).";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK);
 
@@ -61,7 +61,8 @@ namespace OpenTKAnalyzer.OpenTK_
 
 			double result;
 			// MathHelper
-			if (invotation.GetFirstToken().ValueText == nameof(MathHelper))
+			var baseName = invotation.GetFirstToken().ValueText;
+			if (baseName == nameof(MathHelper))
 			{
 				// check method
 				switch (invotation.Expression.GetLastToken().ValueText)
@@ -85,7 +86,7 @@ namespace OpenTKAnalyzer.OpenTK_
 								}
 							}
 						}
-						break;
+						return;
 
 					case nameof(MathHelper.RadiansToDegrees):
 						{
@@ -106,9 +107,10 @@ namespace OpenTKAnalyzer.OpenTK_
 								}
 							}
 						}
-						break;
+						return;
+					default:
+						return;
 				}
-				return;
 			}
 
 			// Matrix2, Matrix3x4 etc...
