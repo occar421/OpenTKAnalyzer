@@ -39,7 +39,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		{
 			// filtering
 			if (context.CodeBlock.Ancestors().OfType<UsingDirectiveSyntax>()
-				.Where(u => u.Name.NormalizeWhitespace().ToFullString() == nameof(OpenTK) + "." + nameof(OpenTK.Graphics) + "." + nameof(OpenTK.Graphics.OpenGL)).Any())
+				.Where(u => u.Name.NormalizeWhitespace().ToFullString() ==
+					nameof(OpenTK) + "." + nameof(OpenTK.Graphics) + "." + nameof(OpenTK.Graphics.OpenGL)).Any())
 			{
 				return;
 			}
@@ -80,7 +81,10 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						counter++;
 						if (counter > 1)
 						{
-							Diagnostics.Add(Diagnostic.Create(Rule, op.Parent.GetLocation(), nameof(GL) + "." + nameof(GL.Begin)));
+							Diagnostics.Add(Diagnostic.Create(
+								descriptor: Rule,
+								location: op.Parent.GetLocation(),
+								messageArgs: nameof(GL) + "." + nameof(GL.Begin)));
 							counter = 1;
 						}
 					}
@@ -89,14 +93,20 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						counter--;
 						if (counter < 0)
 						{
-							Diagnostics.Add(Diagnostic.Create(Rule, op.Parent.GetLocation(), nameof(GL) + "." + nameof(GL.Begin)));
+							Diagnostics.Add(Diagnostic.Create(
+								descriptor: Rule,
+								location: op.Parent.GetLocation(),
+								messageArgs: nameof(GL) + "." + nameof(GL.Begin)));
 							counter = 0;
 						}
 					}
 				}
 				if (counter > 1)
 				{
-					Diagnostics.Add(Diagnostic.Create(Rule, glOperators.Last().Parent.GetLocation(), nameof(GL) + "." + nameof(GL.End)));
+					Diagnostics.Add(Diagnostic.Create(
+						descriptor: Rule,
+						location: glOperators.Last().Parent.GetLocation(),
+						messageArgs: nameof(GL) + "." + nameof(GL.End)));
 				}
 
 				base.VisitBlock(node);
