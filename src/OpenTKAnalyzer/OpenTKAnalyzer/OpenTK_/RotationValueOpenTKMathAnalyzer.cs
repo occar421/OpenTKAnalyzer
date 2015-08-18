@@ -25,7 +25,7 @@ namespace OpenTKAnalyzer.OpenTK_
 		private const string RadianString = "radian";
 		private const string DegreeString = "degree";
 
-		internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+		internal static DiagnosticDescriptor WarningRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
 			messageFormat: MessageFormat,
@@ -33,8 +33,16 @@ namespace OpenTKAnalyzer.OpenTK_
 			defaultSeverity: DiagnosticSeverity.Warning,
 			isEnabledByDefault: true,
 			description: Description);
+		internal static DiagnosticDescriptor InfoRule = new DiagnosticDescriptor(
+			id: DiagnosticId,
+			title: Title,
+			messageFormat: MessageFormat,
+			category: Category,
+			defaultSeverity: DiagnosticSeverity.Info,
+			isEnabledByDefault: true,
+			description: Description);
 
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(WarningRule, InfoRule);
 
 		public override void Initialize(AnalysisContext context)
 		{
