@@ -68,13 +68,8 @@ namespace OpenTKAnalyzer.OpenTK_
 					case nameof(MathHelper.DegreesToRadians):
 						{
 							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							if (literal == null)
-							{
-								return;
-							}
-
 							double result;
-							if (double.TryParse(literal.Token.ValueText, out result))
+							if (double.TryParse(literal?.Token.ValueText, out result))
 							{
 								// perhaps degree value under 2PI is incorrect
 								if (Math.Abs(result) <= 2 * Math.PI)
@@ -94,13 +89,8 @@ namespace OpenTKAnalyzer.OpenTK_
 					case nameof(MathHelper.RadiansToDegrees):
 						{
 							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							if (literal == null)
-							{
-								return;
-							}
-
 							double result;
-							if (double.TryParse(literal.Token.ValueText, out result))
+							if (double.TryParse(literal?.Token.ValueText, out result))
 							{
 								// degree value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
