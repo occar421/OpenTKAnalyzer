@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using OpenTK;
 
 namespace OpenTKAnalyzer.OpenTK_
 {
@@ -19,7 +20,7 @@ namespace OpenTKAnalyzer.OpenTK_
 		private const string Title = "Rotation value(OpenTK Math)";
 		private const string MessageFormat = "{0} accepts {1} values.";
 		private const string Description = "Warm on literal in argument seems invalid style(radian or degree).";
-		private const string Category = "OpenTKAnalyzer:OpenTK";
+		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK);
 
 		private const string RadianString = "radian";
 		private const string DegreeString = "degree";
@@ -45,8 +46,9 @@ namespace OpenTKAnalyzer.OpenTK_
 			var invotation = context.Node as InvocationExpressionSyntax;
 
 			// MathHelper
-			if (invotation.GetFirstToken().ValueText == "MathHelper")
+			if (invotation.GetFirstToken().ValueText == nameof(MathHelper))
 			{
+				// check method
 				switch (invotation.Expression.GetLastToken().ValueText)
 				{
 					default:
@@ -58,6 +60,7 @@ namespace OpenTKAnalyzer.OpenTK_
 			// Matrix2, Matrix3x4 etc...
 			if (invotation.GetFirstToken().ValueText.StartsWith("Matrix"))
 			{
+				// check method
 				switch (invotation.Expression.GetLastToken().ValueText)
 				{
 					default:
