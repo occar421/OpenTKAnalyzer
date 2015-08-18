@@ -44,7 +44,27 @@ namespace OpenTKAnalyzer.OpenTK
 		{
 			var invotation = context.Node as InvocationExpressionSyntax;
 
-			// TODO: check method name and literal on argument
+			// MathHelper
+			if (invotation.GetFirstToken().ValueText == "MathHelper")
+			{
+				switch (invotation.Expression.GetLastToken().ValueText)
+				{
+					default:
+						break;
+				}
+				return;
+			}
+
+			// Matrix2, Matrix3x4 etc...
+			if (invotation.GetFirstToken().ValueText.StartsWith("Matrix"))
+			{
+				switch (invotation.Expression.GetLastToken().ValueText)
+				{
+					default:
+						break;
+				}
+				return;
+			}
 		}
 	}
 }
