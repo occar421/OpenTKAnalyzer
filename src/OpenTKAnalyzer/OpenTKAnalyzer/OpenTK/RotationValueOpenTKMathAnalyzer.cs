@@ -12,9 +12,9 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace OpenTKAnalyzer.OpenTK
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	class BeginEndAnalyzer : DiagnosticAnalyzer
+	class RotationValueOpenTKMathAnalyzer : DiagnosticAnalyzer
 	{
-		public const string DiagnosticId = "RotatinoValue";
+		public const string DiagnosticId = "RotatinoValueOpenTKMath";
 
 		private const string Title = "Rotation value(OpenTK Math)";
 		private const string MessageFormat = "{0} accepts radian values.";
