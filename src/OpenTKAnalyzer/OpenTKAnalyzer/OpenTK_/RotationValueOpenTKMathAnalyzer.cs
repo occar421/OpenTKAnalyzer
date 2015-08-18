@@ -114,13 +114,72 @@ namespace OpenTKAnalyzer.OpenTK_
 			}
 
 			// Matrix2, Matrix3x4 etc...
-			if (invotation.GetFirstToken().ValueText.StartsWith("Matrix"))
+			if (baseName.StartsWith("Matrix"))
 			{
 				// check method
-				switch (invotation.Expression.GetLastToken().ValueText)
+				var methodName = invotation.Expression.GetLastToken().ValueText;
+				switch (methodName)
 				{
-					default:
-						break;
+					// Matrix? or Matrix?x$(? or $ is 2)
+					case nameof(Matrix2.CreateRotation):
+						{
+							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
+							if (double.TryParse(literal?.Token.ValueText, out result))
+							{
+								// radian value usually under 2PI
+								if (Math.Abs(result) >= 2 * Math.PI)
+								{
+									context.ReportDiagnostic(Diagnostic.Create(
+										descriptor: WarningRule,
+										location: literal.GetLocation(),
+										messageArgs: new[] { baseName + "." + methodName, RadianString }));
+								}
+							}
+						}
+						return;
+
+					// Matrix? or Matrix?x$(? or $ is 3 or 4)
+					case nameof(Matrix3.CreateFromAxisAngle):
+					// Matrix4
+					case nameof(Matrix4.Rotate):
+						{
+							// literal is in second argument
+							var literal = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression as LiteralExpressionSyntax;
+							if (double.TryParse(literal?.Token.ValueText, out result))
+							{
+								// radian value usually under 2PI
+								if (Math.Abs(result) >= 2 * Math.PI)
+								{
+									context.ReportDiagnostic(Diagnostic.Create(
+										descriptor: WarningRule,
+										location: literal.GetLocation(),
+										messageArgs: new[] { baseName + "." + methodName, RadianString }));
+								}
+							}
+						}
+						return;
+				}
+
+				// Matrix? or Matrix?x$(? or $ is 3 or 4)
+				// CreateRotationX, CreateRotationY, CreateRotationZ
+				if (methodName.StartsWith("CreateRotation") ||
+					// Matrix4
+					// RotateX, RotateY, RotateZ
+					methodName.StartsWith("Rotate"))
+				{
+					var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
+					if (double.TryParse(literal?.Token.ValueText, out result))
+					{
+						// radian value usually under 2PI
+						if (Math.Abs(result) >= 2 * Math.PI)
+						{
+							context.ReportDiagnostic(Diagnostic.Create(
+								descriptor: WarningRule,
+								location: literal.GetLocation(),
+								messageArgs: new[] { baseName + "." + methodName, RadianString }));
+						}
+					}
+					return;
 				}
 				return;
 			}
