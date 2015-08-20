@@ -58,54 +58,67 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		{
 			internal List<Diagnostic> Diagnostics { get; } = new List<Diagnostic>();
 
+			private struct Pair
+			{
+				internal MemberAccessExpressionSyntax Syntax { get; }
+				internal string OperationName { get; }
+
+				public Pair(MemberAccessExpressionSyntax syntax, string name)
+				{
+					Syntax = syntax;
+					OperationName = name;
+				}
+			}
+
 			public override void VisitBlock(BlockSyntax node)
 			{
 				var statements = node.ChildNodes().OfType<ExpressionStatementSyntax>();
 				var invocations = statements.Select(s => s.Expression).OfType<InvocationExpressionSyntax>();
 				var glOperators = invocations.Select(i => i.Expression).OfType<MemberAccessExpressionSyntax>()
 					.Where(m => m.IsKind(SyntaxKind.SimpleMemberAccessExpression)).Where(s => s.GetFirstToken().Text == nameof(GL));
+				var beginEnds = glOperators.Select(g => new Pair(g, g.ChildNodes().Skip(1).First().GetFirstToken().Text))
+					.Where(p => p.OperationName == nameof(GL.Begin) || p.OperationName == nameof(GL.End));
 
 				// filtering
-				if (!glOperators.Any())
+				if (!beginEnds.Any())
 				{
 					base.VisitBlock(node);
 				}
 
-				// block contains GL.????()
+				// block contains GL.Begin() or GL.End()
 				var counter = 0;
-				foreach (var op in glOperators)
+				foreach (var pair in beginEnds)
 				{
-					var opName = op.ChildNodes().Skip(1).First().GetFirstToken().Text;
-					if (opName == nameof(GL.Begin))
+					if (pair.OperationName == nameof(GL.Begin))
 					{
 						counter++;
 						if (counter > 1)
 						{
 							Diagnostics.Add(Diagnostic.Create(
 								descriptor: Rule,
-								location: op.Parent.GetLocation(),
-								messageArgs: nameof(GL) + "." + nameof(GL.Begin)));
+								location: pair.Syntax.Parent.GetLocation(),
+								messageArgs: nameof(GL) + "." + nameof(GL.End)));
 							counter = 1;
 						}
 					}
-					else if (opName == nameof(GL.End))
+					else if (pair.OperationName == nameof(GL.End))
 					{
 						counter--;
 						if (counter < 0)
 						{
 							Diagnostics.Add(Diagnostic.Create(
 								descriptor: Rule,
-								location: op.Parent.GetLocation(),
+								location: pair.Syntax.Parent.GetLocation(),
 								messageArgs: nameof(GL) + "." + nameof(GL.Begin)));
 							counter = 0;
 						}
 					}
 				}
-				if (counter > 1)
+				if (counter > 0)
 				{
 					Diagnostics.Add(Diagnostic.Create(
 						descriptor: Rule,
-						location: glOperators.Last().Parent.GetLocation(),
+						location: beginEnds.Last().Syntax.Parent.GetLocation(),
 						messageArgs: nameof(GL) + "." + nameof(GL.End)));
 				}
 
