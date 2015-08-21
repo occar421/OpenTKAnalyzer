@@ -17,8 +17,6 @@ assembly_info:
   assembly_informational_version: '{version}'
 environment:
   solution_path: src/OpenTKAnalyzer.sln
-install:
-- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 before_build:
 - ps: >-
     $VERSION = $env:APPVEYOR_BUILD_VERSION
@@ -56,7 +54,7 @@ before_build:
     $xml.Save($nuspec.FullName)
 
 
-    nuget restore ($env:APPVEYOR_BUILD_FOLDER + "/" + $env:solution_path)
+    nuget restore $env:solution_path
 
 
 
