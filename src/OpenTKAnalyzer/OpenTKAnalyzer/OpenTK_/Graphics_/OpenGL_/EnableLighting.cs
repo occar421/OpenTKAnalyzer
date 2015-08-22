@@ -15,7 +15,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 	{
 		public const string DiagnosticId = "EnableLighting";
 
-		private const string Title = "GL.Enable for lighting reminder.";
+		private const string Title = "GL.Enable for lighting.";
 		private const string MessageFormat = "Missing {0}.";
 		private const string Description = "Warm on forget whole lighting enabling.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
@@ -40,11 +40,85 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		private static async void Analyze(SemanticModelAnalysisContext context)
 		{
 			var root = await context.SemanticModel.SyntaxTree.GetRootAsync();
+			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			// (including  using static LightName; using static EnableCap;)
-			// GL.Light(LightName.Light?)
-			// => GL.Enable(EnableCap.Light?)
-			// => GL.Enable(EnableCap.Lighting)
+			var lights = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.Light));
+			var useLights = new bool[8];
+			var lightLocations = new List<Location>[8];
+			for (int i = 0; i < lightLocations.Length; i++)
+			{
+				lightLocations[i] = new List<Location>();
+			}
+			foreach (var lightOp in lights)
+			{
+				var expression = lightOp.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes()?.First();
+				if (expression == null)
+				{
+					continue;
+				}
+				var symbol = context.SemanticModel.GetSymbolInfo(expression).Symbol;
+				if (symbol?.ContainingType?.Name != nameof(LightName))
+				{
+					continue;
+				}
+				var num = int.Parse(symbol.Name.Substring(5));
+				useLights[num] = true;
+				lightLocations[num].Add(lightOp.GetLocation());
+			}
+			if (!useLights.Any(u => u))
+			{
+				return;
+			}
+
+			// need light enabling
+			var enables = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.Enable));
+			var enableLights = new bool[8];
+			var enableWholeLighting = false;
+			var enableLocations = new List<Location>();
+			foreach (var enableOp in enables)
+			{
+				var expression = enableOp.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes()?.First();
+				if (expression == null)
+				{
+					continue;
+				}
+				var symbol = context.SemanticModel.GetSymbolInfo(expression).Symbol;
+				if (symbol?.ContainingType?.Name != nameof(EnableCap))
+				{
+					continue;
+				}
+				if (symbol.Name == nameof(EnableCap.Lighting))
+				{
+					enableWholeLighting = true;
+					continue;
+				}
+				var num = int.Parse(symbol.Name.Substring(5));
+				enableLights[num] = true;
+				enableLocations.Add(enableOp.GetLocation());
+			}
+			for (int i = 0; i < enableLights.Length; i++)
+			{
+				if (useLights[i] && !enableLights[i])
+				{
+					foreach (var location in lightLocations[i])
+					{
+						context.ReportDiagnostic(Diagnostic.Create(
+							descriptor: Rule,
+							location: location,
+							messageArgs: nameof(GL) + "." + nameof(GL.Enable) + "(" + nameof(EnableCap) + ".Location" + i + ")"));
+					}
+				}
+			}
+			if (!enableWholeLighting)
+			{
+				foreach (var location in enableLocations)
+				{
+					context.ReportDiagnostic(Diagnostic.Create(
+						descriptor: Rule,
+						location: location,
+						messageArgs: nameof(GL) + "." + nameof(GL.Enable) + "(" + nameof(EnableCap) + "." + nameof(EnableCap.Lighting) + ")"));
+				}
+			}
 		}
 	}
 }
