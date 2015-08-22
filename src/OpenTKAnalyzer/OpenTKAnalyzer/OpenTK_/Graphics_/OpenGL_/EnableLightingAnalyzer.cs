@@ -56,14 +56,17 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					continue;
 				}
-				var symbol = context.SemanticModel.GetSymbolInfo(expression).Symbol;
-				if (symbol?.ContainingType?.Name != nameof(LightName))
+				var symbol = context.SemanticModel.GetSymbolInfo(expression).Symbol?.OriginalDefinition as IFieldSymbol;
+				if (symbol?.Type?.Name != nameof(LightName))
 				{
 					continue;
 				}
-				var num = int.Parse(symbol.Name.Substring(5));
-				useLights[num] = true;
-				lightLocations[num].Add(lightOp.GetLocation());
+				int number;
+				if (symbol.Name.Length > 5 && int.TryParse(symbol.Name.Substring(5), out number))
+				{
+					useLights[number] = true;
+					lightLocations[number].Add(lightOp.GetLocation());
+				}
 			}
 			if (!useLights.Any(u => u))
 			{
@@ -82,8 +85,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					continue;
 				}
-				var symbol = context.SemanticModel.GetSymbolInfo(expression).Symbol;
-				if (symbol?.ContainingType?.Name != nameof(EnableCap))
+				var symbol = context.SemanticModel.GetSymbolInfo(expression).Symbol?.OriginalDefinition as IFieldSymbol;
+				if (symbol?.Type?.Name != nameof(EnableCap))
 				{
 					continue;
 				}
@@ -92,9 +95,12 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					enableWholeLighting = true;
 					continue;
 				}
-				var num = int.Parse(symbol.Name.Substring(5));
-				enableLights[num] = true;
-				enableLocations.Add(enableOp.GetLocation());
+				int number;
+				if (symbol.Name.Length > 5 && int.TryParse(symbol.Name.Substring(5), out number))
+				{
+					enableLights[number] = true;
+					enableLocations.Add(enableOp.GetLocation());
+				}
 			}
 			for (int i = 0; i < enableLights.Length; i++)
 			{
