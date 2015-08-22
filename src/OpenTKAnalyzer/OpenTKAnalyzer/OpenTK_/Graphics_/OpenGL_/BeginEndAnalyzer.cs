@@ -87,6 +87,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 				// block contains GL.Begin() or GL.End()
 				var counter = 0;
+				Location prevBeginLocation = null;
 				foreach (var pair in beginEnds)
 				{
 					if (pair.OperationName == nameof(GL.Begin))
@@ -96,10 +97,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						{
 							Diagnostics.Add(Diagnostic.Create(
 								descriptor: Rule,
-								location: pair.Syntax.Parent.GetLocation(),
+								location: prevBeginLocation,
 								messageArgs: nameof(GL) + "." + nameof(GL.End)));
 							counter = 1;
 						}
+						prevBeginLocation = pair.Syntax.Parent.GetLocation();
 					}
 					else if (pair.OperationName == nameof(GL.End))
 					{
@@ -118,7 +120,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					Diagnostics.Add(Diagnostic.Create(
 						descriptor: Rule,
-						location: beginEnds.Last().Syntax.Parent.GetLocation(),
+						location: prevBeginLocation,
 						messageArgs: nameof(GL) + "." + nameof(GL.End)));
 				}
 
