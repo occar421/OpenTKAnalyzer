@@ -104,7 +104,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				var glOperators = invocations.Select(i => i.Expression).OfType<MemberAccessExpressionSyntax>()
 					.Where(m => m.IsKind(SyntaxKind.SimpleMemberAccessExpression)).Where(s => s.GetFirstToken().Text == nameof(GL));
 				var pushPops = glOperators.Select(g => new Pair(g, g.ChildNodes().Skip(1).First().GetFirstToken().Text))
-					.Where(p => p.OperationName.StartsWith("Push") || p.OperationName.EndsWith("Pop"));
+					.Where(p => p.OperationName.StartsWith("Push") || p.OperationName.StartsWith("Pop"));
 
 				// filtering
 				if (!pushPops.Any())
@@ -114,30 +114,33 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 				// block contains GL.Push???() or GL.Pop???
 				var counters = new int[reverseRouter.Count]; // new int[5]
+				var prevPushLocations = new Location[reverseRouter.Count]; // new Location[5]
 				foreach (var pair in pushPops)
 				{
+					var route = router[pair.OperationName];
 					if (pair.OperationName.StartsWith("Push"))
 					{
-						counters[router[pair.OperationName]]++;
-						if (counters[router[pair.OperationName]] > 1)
+						counters[route]++;
+						if (counters[route] > 1)
 						{
 							Diagnostics.Add(Diagnostic.Create(
 								descriptor: Rule,
-								location: pair.Syntax.Parent.GetLocation(),
-								messageArgs: nameof(GL) + ".Pop" + reverseRouter[counters[router[pair.OperationName]]]));
+								location: prevPushLocations[route],
+								messageArgs: nameof(GL) + ".Pop" + reverseRouter[route]));
 							counters[router[pair.OperationName]] = 1;
 						}
+						prevPushLocations[route] = pair.Syntax.Parent.GetLocation();
 					}
 					else if (pair.OperationName.StartsWith("Pop"))
 					{
-						counters[router[pair.OperationName]]--;
-						if (counters[router[pair.OperationName]] < 0)
+						counters[route]--;
+						if (counters[route] < 0)
 						{
 							Diagnostics.Add(Diagnostic.Create(
 								descriptor: Rule,
 								location: pair.Syntax.Parent.GetLocation(),
-								messageArgs: nameof(GL) + ".Push" + reverseRouter[counters[router[pair.OperationName]]]));
-							counters[router[pair.OperationName]] = 0;
+								messageArgs: nameof(GL) + ".Push" + reverseRouter[route]));
+							counters[route] = 0;
 						}
 					}
 				}
@@ -147,8 +150,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					{
 						Diagnostics.Add(Diagnostic.Create(
 							descriptor: Rule,
-							location: pushPops.Last(p => p.OperationName.EndsWith(reverseRouter[i])).Syntax.Parent.GetLocation(),
-							messageArgs: nameof(GL) + ".End" + reverseRouter[i]));
+							location: prevPushLocations[i],
+							messageArgs: nameof(GL) + ".Pop" + reverseRouter[i]));
 					}
 				}
 
