@@ -11,13 +11,13 @@ using OpenTK.Graphics.OpenGL;
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	class EnableLighting : DiagnosticAnalyzer
+	class EnableLightingAnalyzer : DiagnosticAnalyzer
 	{
 		public const string DiagnosticId = "EnableLighting";
 
 		private const string Title = "GL.Enable for lighting.";
 		private const string MessageFormat = "Missing {0}.";
-		private const string Description = "Warm on forget whole lighting enabling.";
+		private const string Description = "Warm on forget lighting enabling.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
 
@@ -105,7 +105,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: Rule,
 							location: location,
-							messageArgs: nameof(GL) + "." + nameof(GL.Enable) + "(" + nameof(EnableCap) + ".Location" + i + ")"));
+							messageArgs: nameof(GL) + "." + nameof(GL.Enable) + "(" + nameof(EnableCap) + ".Light" + i + ")"));
 					}
 				}
 			}
