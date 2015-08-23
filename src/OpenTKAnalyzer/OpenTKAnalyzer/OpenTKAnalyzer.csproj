@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OpenTK_\Graphics_\OpenGL_\LightArgumentAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\LightParamAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
