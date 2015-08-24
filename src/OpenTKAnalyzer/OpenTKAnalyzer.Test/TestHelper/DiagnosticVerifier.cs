@@ -159,14 +159,15 @@ namespace OpenTKAnalyzer.Test.TestHelper
 				{
 					if (diagnostic.Location == Location.None)
 					{
-						builder.Append($"GetClobalResult({analyzerType.Name}.{rule.Id})");
+						builder.Append($"GetGlobalResult({analyzerType.Name}.{rule.Id})");
 					}
 					else
 					{
 						Assert.IsTrue(diagnostic.Location.IsInSource, $"Test base does not currently handle diagnostics in metadata locations. Diagnostic in metadata: {diagnostic}{NewLine}");
 
+						var resultMethodName = diagnostic.Location.SourceTree.FilePath.EndsWith(".cs") ? "CSharp" : "Basic";
 						var linePosition = diagnostic.Location.GetLineSpan().StartLinePosition;
-						builder.Append($"GetCSharpResultAt({linePosition.Line + 1}, {linePosition.Character + 1}, {analyzerType.Name}.{rule.Id}");
+						builder.Append($"Get{resultMethodName}ResultAt({linePosition.Line + 1}, {linePosition.Character + 1}, {analyzerType.Name}.{rule.Id})");
 					}
 
 					builder.AppendLine();
