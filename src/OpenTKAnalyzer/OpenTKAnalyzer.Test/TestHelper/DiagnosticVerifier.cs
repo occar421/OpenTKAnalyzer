@@ -21,6 +21,7 @@ namespace OpenTKAnalyzer.Test.TestHelper
 		private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
 		private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
 		private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
+		private static readonly MetadataReference OpenTKReference = MetadataReference.CreateFromFile(typeof(OpenTK.GameWindow).Assembly.Location);
 
 		internal static string DefaultFilePathPrefix = "Test";
 		internal static string CSharpDefaultFileExt = "cs";
@@ -257,7 +258,8 @@ namespace OpenTKAnalyzer.Test.TestHelper
 				.AddMetadataReference(projectId, CorlibReference)
 				.AddMetadataReference(projectId, SystemCoreReference)
 				.AddMetadataReference(projectId, CSharpSymbolsReference)
-				.AddMetadataReference(projectId, CodeAnalysisReference);
+				.AddMetadataReference(projectId, CodeAnalysisReference)
+				.AddMetadataReference(projectId, OpenTKReference);
 
 			for (int i = 0; i < sources.Length; i++)
 			{
