@@ -16,7 +16,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 		private const string Title = "GL.Begin and GL.End comformity";
 		private const string MessageFormat = "Missing {0}.";
-		private const string Description = "";
+		private const string Description = "Warm on comformity of GL.Begin and GL.End seems not good.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
 		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
