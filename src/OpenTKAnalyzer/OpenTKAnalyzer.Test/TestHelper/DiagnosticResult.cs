@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace OpenTKAnalyzer.Test.TestHelper
+namespace OpenTKAnalyzer.TestHelper
 {
 	/// <summary>
 	/// Struct that stores information about a Diagnostic appearing in a source

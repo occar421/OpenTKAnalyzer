@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using static System.Environment;
 
-namespace OpenTKAnalyzer.Test.TestHelper
+namespace OpenTKAnalyzer.TestHelper
 {
 	/// <summary>
 	/// Superclass of all Unit tests made for diagnostics with codefixes.

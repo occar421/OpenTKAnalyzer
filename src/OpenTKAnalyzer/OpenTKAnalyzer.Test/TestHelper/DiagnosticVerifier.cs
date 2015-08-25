@@ -10,7 +10,7 @@ using static System.Environment;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.Text;
 
-namespace OpenTKAnalyzer.Test.TestHelper
+namespace OpenTKAnalyzer.TestHelper
 {
 	/// <summary>
 	/// Superclass of all Unit Tests for DiagnosticAnalyzers
