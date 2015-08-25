@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL;
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	class PushPopAnalyzer : DiagnosticAnalyzer
+	public class PushPopAnalyzer : DiagnosticAnalyzer
 	{
 		public const string DiagnosticId = "PushPop";
 
