@@ -13,7 +13,7 @@ using OpenTK;
 namespace OpenTKAnalyzer.OpenTK_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	class RotationValueOpenTKMathAnalyzer : DiagnosticAnalyzer
+	public class RotationValueOpenTKMathAnalyzer : DiagnosticAnalyzer
 	{
 		public const string DiagnosticId = "RotatinoValueOpenTKMath";
 
