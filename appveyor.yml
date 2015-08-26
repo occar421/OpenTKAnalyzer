@@ -1,0 +1,66 @@
+version: 0.1.0.{build}
+environment:
+  stage: alpha
+  solution_path: src\OpenTKAnalyzer.sln
+branches:
+  only:
+  - master
+  - develop
+  - /release\/.+/
+  - /hotfix\/.+/
+  - /support\/.+/
+os: Visual Studio 2015
+configuration: AppVeyor_NuGet
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+- ps: >-
+    $VERSION = $env:APPVEYOR_BUILD_VERSION
+
+    $STAGE = $env:stage
+
+
+    $vs = $VERSION -split "\."
+
+    $nupkgVersion = $vs[0] + "." + $vs[1] + "." + $vs[2]
+
+    if($STAGE -ne "release"){
+        $nupkgVersion = $nupkgVersion + "-" + $STAGE
+    }
+
+
+    # rewrite
+
+    $nuspec = (ls $env:APPVEYOR_BUILD_FOLDER -Recurse).Where{ $_.Extension -eq ".nuspec"} | Select -First 1
+
+    [xml]$xml = Get-Content $nuspec.FullName
+
+    $xml.package.metadata.version = $nupkgVersion
+
+    $xml.Save($nuspec.FullName)
+
+
+    nuget restore $env:solution_path
+
+
+
+    Remove-Item "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\Extensions\Amazon Web Services LLC" -Recurse -Force
+build:
+  project: $(solution_path)
+  verbosity: minimal
+after_build:
+- ps: >-
+    $folder = $env:APPVEYOR_BUILD_FOLDER + "\" + ($env:solution_path -split "\.")[0]
+
+    (Get-ChildItem $folder -Recurse).Where{ $_.Extension -eq ".nupkg"} | %{ Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+deploy:
+- provider: NuGet
+  api_key:
+    secure: e6vaTPs/qG5DkeYt4zWnEwOEzMTRa+Fskx7k5GAz8OYGafTzasM5FX54JhiiJjFR
+  on:
+    branch: master
