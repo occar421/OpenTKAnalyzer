@@ -16,7 +16,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		public const string DiagnosticId = "LightParam";
 
 		private const string Title = "GL.Light param(third argument).";
-		private const string MessageFormat = "{0} requires {1} in param(third argument)";
+		private const string MessageFormat = "{0} requires {1} in param(third argument).";
 		private const string Description = "Error on used invalid argument on GL.Light param(third argument).";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
