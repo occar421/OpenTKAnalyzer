@@ -11,7 +11,7 @@
 		<!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>Analyzer for OpenTK (unofficial)</description>
-		<releaseNotes>Not Avaliable</releaseNotes>
+		<releaseNotes>Add BeginEnd, RetationValueOpenTKMath, PushPop, EnableLighting, LightParameter analyzers.</releaseNotes>
 		<copyright>Copyright 2015 MasuqaT</copyright>
 		<tags>OpenTK, OpenTKAnalyzer, analyzers</tags>
 	</metadata>
