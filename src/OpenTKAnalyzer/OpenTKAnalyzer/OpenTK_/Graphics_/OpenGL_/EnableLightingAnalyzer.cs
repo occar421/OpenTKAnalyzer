@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL;
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	class EnableLightingAnalyzer : DiagnosticAnalyzer
+	public class EnableLightingAnalyzer : DiagnosticAnalyzer
 	{
 		public const string DiagnosticId = "EnableLighting";
 
