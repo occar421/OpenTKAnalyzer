@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzerTests.cs" />
+    <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzerTests.cs" />
     <Compile Include="TestHelper\CodeFixVerifier.cs" />
     <Compile Include="TestHelper\DiagnosticResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

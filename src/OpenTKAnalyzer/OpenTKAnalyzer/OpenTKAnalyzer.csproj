@@ -32,6 +32,7 @@
   <ItemGroup>
     <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagnostic.nuspec">
