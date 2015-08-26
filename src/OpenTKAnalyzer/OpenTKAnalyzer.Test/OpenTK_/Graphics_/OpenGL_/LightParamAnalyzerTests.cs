@@ -97,21 +97,21 @@ class Class1
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
-					Message = "LightParameter.SpotExponent requires int, float in param(third argument)",
+					Message = "LightParameter.SpotExponent requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 59) }
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
-					Message = "LightParameter.SpotCutoff requires int, float in param(third argument)",
+					Message = "LightParameter.SpotCutoff requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 57) }
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
-					Message = "LightParameter.ConstantAttenuation requires int[], float[] in param(third argument)",
+					Message = "LightParameter.ConstantAttenuation requires int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 66) }
 				});
@@ -154,21 +154,21 @@ class Class1
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
-					Message = "LightParameter.SpotExponent requires int, float in param(third argument)",
+					Message = "LightParameter.SpotExponent requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 44) }
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
-					Message = "LightParameter.SpotCutoff requires int, float in param(third argument)",
+					Message = "LightParameter.SpotCutoff requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 42) }
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
-					Message = "LightParameter.ConstantAttenuation requires int[], float[] in param(third argument)",
+					Message = "LightParameter.ConstantAttenuation requires int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
 					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 51) }
 				});
