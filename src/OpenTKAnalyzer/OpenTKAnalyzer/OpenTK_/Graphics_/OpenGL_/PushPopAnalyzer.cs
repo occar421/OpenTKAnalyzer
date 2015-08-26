@@ -14,9 +14,9 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 	{
 		public const string DiagnosticId = "PushPop";
 
-		private const string Title = "GL.Push??? and GL.Pop??? comformity";
+		private const string Title = "GL.Push and GL.Pop comformity";
 		private const string MessageFormat = "Missing {0}.";
-		private const string Description = "Analyzer for GL.Push??? and GL.Push???.";
+		private const string Description = "Warn when GL.Push and GL.Push functions' conformity incorrect.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
 		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
