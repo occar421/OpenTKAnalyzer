@@ -110,6 +110,7 @@
     <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzerTests.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\PushPopAnalyzerTests.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzerTests.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\LightParamAnalyzerTests.cs" />
     <Compile Include="TestHelper\CodeFixVerifier.cs" />
     <Compile Include="TestHelper\DiagnosticResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

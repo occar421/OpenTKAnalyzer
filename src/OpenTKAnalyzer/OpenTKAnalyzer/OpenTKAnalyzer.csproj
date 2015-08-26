@@ -34,6 +34,7 @@
     <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\PushPopAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\LightParamAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
