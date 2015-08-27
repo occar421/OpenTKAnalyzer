@@ -112,7 +112,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 								var typeInfo = context.SemanticModel.GetTypeInfo(insideExpression);
 								if (typeInfo.Type?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) == nameof(FogMode))
 								{
-									var elementName = insideExpression.ChildNodes().LastOrDefault()?.ToFullString();
+                                    var elementName = insideExpression.DescendantNodesAndSelf().LastOrDefault()?.ToFullString();
 									if (correctTypeNames.Any(n => n == elementName))
 									{
 										continue;
