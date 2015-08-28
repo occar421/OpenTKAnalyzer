@@ -30,16 +30,16 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			isEnabledByDefault: true,
 			description: Description);
 
-		internal static DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+		internal static DiagnosticDescriptor BufferTargetRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: "",
+			messageFormat: "The variable \"{0}\" is used in multipul buffer targets ({1}).",
 			category: Category,
-			defaultSeverity: DiagnosticSeverity.Warning,
+			defaultSeverity: DiagnosticSeverity.Error,
 			isEnabledByDefault: true,
 			description: Description);
 
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NoConstantRule, Rule);
+		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NoConstantRule, BufferTargetRule);
 
 		public override void Initialize(AnalysisContext context)
 		{
@@ -56,7 +56,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var deleteBuffers = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
 
 			var syntaxValidBinds = bindBuffers.Where(b => b.ArgumentList.Arguments.Count == 2);
-			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Skip(1).First().ChildNodes().First()).OfType<LiteralExpressionSyntax>().Where(l => int.Parse(l.Token.ValueText) != 0);
+			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Skip(1).First().ChildNodes().First())
+				.OfType<LiteralExpressionSyntax>().Where(l => int.Parse(l.Token.ValueText) != 0);
 			foreach (var bindLiteral in constantInvalidBinds)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
@@ -65,13 +66,32 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					messageArgs: new[] { nameof(GL) + "." + nameof(bindBuffers), "variable or 0" }));
 			}
 
-			var constantInvalidDeletes = deleteBuffers.Select(b => b.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes().First()).OfType<LiteralExpressionSyntax>();
+			var constantInvalidDeletes = deleteBuffers.Select(b => b.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes().First())
+				.OfType<LiteralExpressionSyntax>();
 			foreach (var deleteLiteral in constantInvalidDeletes)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: NoConstantRule,
 					location: deleteLiteral.GetLocation(),
 					messageArgs: new[] { nameof(GL) + "." + nameof(bindBuffers), "variable" }));
+			}
+
+			var variableBindGroups = syntaxValidBinds.Select(b => b.ArgumentList)
+				.GroupBy(arg => context.SemanticModel.GetSymbolInfo(arg.Arguments.Skip(1).First().ChildNodes().First()).Symbol)
+				.Where(g => g.Key != null); // <- constant on second argument
+			foreach (var group in variableBindGroups)
+			{
+				var targets = group.GroupBy(g => context.SemanticModel.GetSymbolInfo(g.Arguments.First().ChildNodes().First())).Where(t => t.Key.Symbol != null);
+				if (targets.Count() >= 2)
+				{
+					foreach (var invocation in group.Select(i => i.Parent))
+					{
+						context.ReportDiagnostic(Diagnostic.Create(
+							descriptor: BufferTargetRule,
+							location: invocation.GetLocation(),
+							messageArgs: new[] { group.Key.Name, string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
+					}
+				}
 			}
 		}
 	}
