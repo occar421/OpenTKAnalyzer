@@ -67,7 +67,24 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 
 			var variableBindGroups = syntaxValidBinds.Select(b => b.ArgumentList)
-				.GroupBy(arg => context.SemanticModel.GetSymbolInfo(arg.Arguments.Skip(1).First().ChildNodes().First()).Symbol)
+				.GroupBy(arg =>
+				{
+					var node = arg.Arguments.Skip(1).First().ChildNodes().First();
+					if (node is ElementAccessExpressionSyntax)
+					{
+						var identifierSymbol = context.SemanticModel.GetSymbolInfo(node.ChildNodes().First()).Symbol;
+						var index = node.ChildNodes().Skip(1).FirstOrDefault()?.WithoutTrivia();
+						return identifierSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + index.ToFullString();
+					}
+					else if (node is LiteralExpressionSyntax)
+					{
+						return null;
+					}
+					else
+					{
+						return context.SemanticModel.GetSymbolInfo(node).Symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+					}
+				})
 				.Where(g => g.Key != null); // <- constant on second argument
 			foreach (var group in variableBindGroups)
 			{
@@ -79,7 +96,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: TargetRule,
 							location: invocation.GetLocation(),
-							messageArgs: new[] { group.Key.Name, string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
+							messageArgs: new[] { group.Key.Split('.').Last(), string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
 					}
 				}
 			}
