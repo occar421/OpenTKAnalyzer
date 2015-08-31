@@ -13,18 +13,19 @@ using OpenTK.Graphics.OpenGL;
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
 	[DiagnosticAnalyzer(LanguageNames.CSharp)]
-	public class BufferManagemantAnalyzer : DiagnosticAnalyzer
+	public class BindBufferTargetAnalyzer : DiagnosticAnalyzer
 	{
-		public const string DiagnosticId = "BufferManagement";
+		public const string DiagnosticId = "BindBufferTarget";
 
-		private const string Title = "Buffer management";
-		private const string Description = "Check buffer usage.";
+		private const string Title = "GL.BindBuffer target check";
+		private const string MessageFormat = "The variable \"{0}\" is used in multipul buffer targets ({1}).";
+		private const string Description = "Check buffer target.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
 		internal static DiagnosticDescriptor NoConstantRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: "{0} accepts {1}.",
+			messageFormat: MessageFormat,
 			category: Category,
 			defaultSeverity: DiagnosticSeverity.Error,
 			isEnabledByDefault: true,
@@ -53,7 +54,6 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
 			var bindBuffers = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.BindBuffer));
-			var deleteBuffers = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
 
 			var syntaxValidBinds = bindBuffers.Where(b => b.ArgumentList.Arguments.Count == 2);
 			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Skip(1).First().ChildNodes().First())
@@ -64,16 +64,6 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					descriptor: NoConstantRule,
 					location: bindLiteral.GetLocation(),
 					messageArgs: new[] { nameof(GL) + "." + nameof(bindBuffers), "variable or 0" }));
-			}
-
-			var constantInvalidDeletes = deleteBuffers.Select(b => b.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes().First())
-				.OfType<LiteralExpressionSyntax>();
-			foreach (var deleteLiteral in constantInvalidDeletes)
-			{
-				context.ReportDiagnostic(Diagnostic.Create(
-					descriptor: NoConstantRule,
-					location: deleteLiteral.GetLocation(),
-					messageArgs: new[] { nameof(GL) + "." + nameof(bindBuffers), "variable" }));
 			}
 
 			var variableBindGroups = syntaxValidBinds.Select(b => b.ArgumentList)

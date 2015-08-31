@@ -31,7 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzer.cs" />
-    <Compile Include="OpenTK_\Graphics_\OpenGL_\BufferManagemantAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\BindBufferTargetAnalyzer.cs" />
     <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\PushPopAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzer.cs" />
