@@ -18,29 +18,30 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		public const string DiagnosticId = "BindBufferTarget";
 
 		private const string Title = "GL.BindBuffer target check";
-		private const string MessageFormat = "The variable \"{0}\" is used in multipul buffer targets ({1}).";
+		private const string NoConstantMessageFormat = nameof(GL) + "." + nameof(GL.BindBuffer) + " accepts variable or 0.";
+		private const string TargetMessageFormat = "The variable \"{0}\" is used in multipul buffer targets ({1}).";
 		private const string Description = "Check buffer target.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
 		internal static DiagnosticDescriptor NoConstantRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: MessageFormat,
+			messageFormat: NoConstantMessageFormat,
 			category: Category,
 			defaultSeverity: DiagnosticSeverity.Error,
 			isEnabledByDefault: true,
 			description: Description);
 
-		internal static DiagnosticDescriptor BufferTargetRule = new DiagnosticDescriptor(
+		internal static DiagnosticDescriptor TargetRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: "The variable \"{0}\" is used in multipul buffer targets ({1}).",
+			messageFormat: TargetMessageFormat,
 			category: Category,
 			defaultSeverity: DiagnosticSeverity.Error,
 			isEnabledByDefault: true,
 			description: Description);
 
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NoConstantRule, BufferTargetRule);
+		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NoConstantRule, TargetRule);
 
 		public override void Initialize(AnalysisContext context)
 		{
@@ -62,8 +63,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: NoConstantRule,
-					location: bindLiteral.GetLocation(),
-					messageArgs: new[] { nameof(GL) + "." + nameof(bindBuffers), "variable or 0" }));
+					location: bindLiteral.GetLocation()));
 			}
 
 			var variableBindGroups = syntaxValidBinds.Select(b => b.ArgumentList)
@@ -77,7 +77,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					foreach (var invocation in group.Select(i => i.Parent))
 					{
 						context.ReportDiagnostic(Diagnostic.Create(
-							descriptor: BufferTargetRule,
+							descriptor: TargetRule,
 							location: invocation.GetLocation(),
 							messageArgs: new[] { group.Key.Name, string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
 					}
