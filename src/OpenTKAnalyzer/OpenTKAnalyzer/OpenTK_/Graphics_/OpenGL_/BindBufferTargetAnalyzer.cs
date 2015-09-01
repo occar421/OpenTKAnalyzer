@@ -18,8 +18,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		public const string DiagnosticId = "BindBufferTarget";
 
 		private const string Title = "GL.BindBuffer target check";
-		private const string NoConstantMessageFormat = nameof(GL) + "." + nameof(GL.BindBuffer) + " accepts variable or 0.";
-		private const string TargetMessageFormat = "The variable \"{0}\" is used in multipul buffer targets ({1}).";
+		private const string NoConstantMessageFormat = nameof(GL) + "." + nameof(GL.BindBuffer) + " accepts variable or 0 on 2nd argument.";
+		private const string TargetMessageFormat = "The variable \"{0}\" is used in multiple buffer targets ({1}).";
 		private const string Description = "Check buffer target.";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK.Graphics.OpenGL);
 
