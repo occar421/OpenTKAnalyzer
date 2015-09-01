@@ -60,6 +60,7 @@ namespace OpenTKAnalyzer.OpenTK_
 			}
 
 			double result;
+			string literalString = string.Empty;
 			// MathHelper
 			var baseName = invotation.GetFirstToken().ValueText;
 			if (baseName == nameof(MathHelper))
@@ -69,15 +70,25 @@ namespace OpenTKAnalyzer.OpenTK_
 				{
 					case nameof(MathHelper.DegreesToRadians):
 						{
-							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							if (double.TryParse(literal?.Token.ValueText, out result))
+							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
+							if (argumentExpression is PrefixUnaryExpressionSyntax)
+							{
+								var s = argumentExpression as PrefixUnaryExpressionSyntax;
+								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+							}
+							else if (argumentExpression is LiteralExpressionSyntax)
+							{
+								var s = argumentExpression as LiteralExpressionSyntax;
+								literalString = s.Token.ValueText;
+							}
+							if (double.TryParse(literalString, out result))
 							{
 								// perhaps degree value under 2PI is incorrect
 								if (Math.Abs(result) <= 2 * Math.PI)
 								{
 									context.ReportDiagnostic(Diagnostic.Create(
 										descriptor: InfoRule,
-										location: literal.GetLocation(),
+										location: argumentExpression.GetLocation(),
 										messageArgs: new[]
 										{
 											nameof(MathHelper) + "." + nameof(MathHelper.DegreesToRadians),
@@ -90,15 +101,25 @@ namespace OpenTKAnalyzer.OpenTK_
 
 					case nameof(MathHelper.RadiansToDegrees):
 						{
-							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							if (double.TryParse(literal?.Token.ValueText, out result))
+							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
+							if (argumentExpression is PrefixUnaryExpressionSyntax)
+							{
+								var s = argumentExpression as PrefixUnaryExpressionSyntax;
+								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+							}
+							else if (argumentExpression is LiteralExpressionSyntax)
+							{
+								var s = argumentExpression as LiteralExpressionSyntax;
+								literalString = s.Token.ValueText;
+							}
+							if (double.TryParse(literalString, out result))
 							{
 								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
 								{
 									context.ReportDiagnostic(Diagnostic.Create(
 										descriptor: WarningRule,
-										location: literal.GetLocation(),
+										location: argumentExpression.GetLocation(),
 										messageArgs: new[]
 										{
 											nameof(MathHelper) + "." + nameof(MathHelper.RadiansToDegrees),
@@ -123,15 +144,25 @@ namespace OpenTKAnalyzer.OpenTK_
 					// Matrix? or Matrix?x$(? or $ is 2)
 					case nameof(Matrix2.CreateRotation):
 						{
-							var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-							if (double.TryParse(literal?.Token.ValueText, out result))
+							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
+							if (argumentExpression is PrefixUnaryExpressionSyntax)
+							{
+								var s = argumentExpression as PrefixUnaryExpressionSyntax;
+								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+							}
+							else if (argumentExpression is LiteralExpressionSyntax)
+							{
+								var s = argumentExpression as LiteralExpressionSyntax;
+								literalString = s.Token.ValueText;
+							}
+							if (double.TryParse(literalString, out result))
 							{
 								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
 								{
 									context.ReportDiagnostic(Diagnostic.Create(
 										descriptor: WarningRule,
-										location: literal.GetLocation(),
+										location: argumentExpression.GetLocation(),
 										messageArgs: new[] { baseName + "." + methodName, RadianString }));
 								}
 							}
@@ -143,16 +174,26 @@ namespace OpenTKAnalyzer.OpenTK_
 					// Matrix4
 					case nameof(Matrix4.Rotate):
 						{
-							// literal is in second argument
-							var literal = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression as LiteralExpressionSyntax;
-							if (double.TryParse(literal?.Token.ValueText, out result))
+							// number is in second argument
+							var argumentExpression = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression;
+							if (argumentExpression is PrefixUnaryExpressionSyntax)
+							{
+								var s = argumentExpression as PrefixUnaryExpressionSyntax;
+								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+							}
+							else if (argumentExpression is LiteralExpressionSyntax)
+							{
+								var s = argumentExpression as LiteralExpressionSyntax;
+								literalString = s.Token.ValueText;
+							}
+							if (double.TryParse(literalString, out result))
 							{
 								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
 								{
 									context.ReportDiagnostic(Diagnostic.Create(
 										descriptor: WarningRule,
-										location: literal.GetLocation(),
+										location: argumentExpression.GetLocation(),
 										messageArgs: new[] { baseName + "." + methodName, RadianString }));
 								}
 							}
@@ -167,15 +208,25 @@ namespace OpenTKAnalyzer.OpenTK_
 					// RotateX, RotateY, RotateZ
 					methodName.StartsWith("Rotate"))
 				{
-					var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-					if (double.TryParse(literal?.Token.ValueText, out result))
+					var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
+					if (argumentExpression is PrefixUnaryExpressionSyntax)
+					{
+						var s = argumentExpression as PrefixUnaryExpressionSyntax;
+						literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+					}
+					else if (argumentExpression is LiteralExpressionSyntax)
+					{
+						var s = argumentExpression as LiteralExpressionSyntax;
+						literalString = s.Token.ValueText;
+					}
+					if (double.TryParse(literalString, out result))
 					{
 						// radian value usually under 2PI
 						if (Math.Abs(result) >= 2 * Math.PI)
 						{
 							context.ReportDiagnostic(Diagnostic.Create(
 								descriptor: WarningRule,
-								location: literal.GetLocation(),
+								location: argumentExpression.GetLocation(),
 								messageArgs: new[] { baseName + "." + methodName, RadianString }));
 						}
 					}
@@ -190,16 +241,26 @@ namespace OpenTKAnalyzer.OpenTK_
 				var methodName = invotation.Expression.GetLastToken().ValueText;
 				if (methodName == nameof(Quaternion.FromAxisAngle))
 				{
-					// literal is in second argument
-					var literal = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression as LiteralExpressionSyntax;
-					if (double.TryParse(literal?.Token.ValueText, out result))
+					// number is in second argument
+					var argumentExpression = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression;
+					if (argumentExpression is PrefixUnaryExpressionSyntax)
+					{
+						var s = argumentExpression as PrefixUnaryExpressionSyntax;
+						literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+					}
+					else if (argumentExpression is LiteralExpressionSyntax)
+					{
+						var s = argumentExpression as LiteralExpressionSyntax;
+						literalString = s.Token.ValueText;
+					}
+					if (double.TryParse(literalString, out result))
 					{
 						// radian value usually under 2PI
 						if (Math.Abs(result) >= 2 * Math.PI)
 						{
 							context.ReportDiagnostic(Diagnostic.Create(
 								descriptor: WarningRule,
-								location: literal.GetLocation(),
+								location: argumentExpression.GetLocation(),
 								messageArgs: new[] { baseName + "." + methodName, RadianString }));
 						}
 					}
