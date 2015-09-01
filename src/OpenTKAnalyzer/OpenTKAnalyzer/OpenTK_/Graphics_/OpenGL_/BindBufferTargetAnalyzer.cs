@@ -57,7 +57,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var bindBuffers = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.BindBuffer));
 
 			var syntaxValidBinds = bindBuffers.Where(b => b.ArgumentList.Arguments.Count == 2);
-			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Skip(1).First().ChildNodes().First())
+			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Last().Expression)
 				.OfType<LiteralExpressionSyntax>().Where(l => int.Parse(l.Token.ValueText) != 0);
 			foreach (var bindLiteral in constantInvalidBinds)
 			{
@@ -88,7 +88,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				.Where(g => g.Key != null); // <- constant on second argument
 			foreach (var group in variableBindGroups)
 			{
-				var targets = group.GroupBy(g => context.SemanticModel.GetSymbolInfo(g.Arguments.First().ChildNodes().First())).Where(t => t.Key.Symbol != null);
+				var targets = group.GroupBy(g => context.SemanticModel.GetSymbolInfo(g.Arguments.First().Expression)).Where(t => t.Key.Symbol != null);
 				if (targets.Count() >= 2)
 				{
 					foreach (var invocation in group.Select(i => i.Parent))
