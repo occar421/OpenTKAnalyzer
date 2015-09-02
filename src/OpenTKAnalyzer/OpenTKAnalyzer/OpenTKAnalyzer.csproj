@@ -36,6 +36,7 @@
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\LightParamAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\NumericValueParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagnostic.nuspec">
