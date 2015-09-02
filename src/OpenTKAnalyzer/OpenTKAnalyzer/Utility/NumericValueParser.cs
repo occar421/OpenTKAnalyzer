@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
 
 namespace OpenTKAnalyzer.Utility
 {
@@ -12,18 +13,51 @@ namespace OpenTKAnalyzer.Utility
 	{
 		static public bool TryParseFromExpression(ExpressionSyntax expression, out double result)
 		{
-			var literalString = string.Empty;
-			if (expression is PrefixUnaryExpressionSyntax)
+			var walker = new DoubleExpressWalker();
+			walker.Visit(expression);
+			result = walker.Value ?? double.NegativeInfinity;
+			return walker.Value.HasValue;
+		}
+
+		class DoubleExpressWalker : CSharpSyntaxWalker
+		{
+			internal double? Value { get; private set; } = null;
+
+			bool isValuePositive = true;
+
+			// fail
+			public override void DefaultVisit(SyntaxNode node)
 			{
-				var s = expression as PrefixUnaryExpressionSyntax;
-				literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
+				return;
 			}
-			else if (expression is LiteralExpressionSyntax)
+
+			public override void VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
 			{
-				var s = expression as LiteralExpressionSyntax;
-				literalString = s.Token.ValueText;
+				switch (node.OperatorToken.ValueText)
+				{
+					case "+":
+						break;
+					case "-":
+						isValuePositive = !isValuePositive;
+						break;
+					default:
+						return;
+				}
+				base.Visit(node.Operand);
 			}
-			return double.TryParse(literalString, out result);
+
+			public override void VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
+			{
+				base.Visit(node.Expression);
+			}
+
+			public override void VisitLiteralExpression(LiteralExpressionSyntax node)
+			{
+				if (node.IsKind(SyntaxKind.NumericLiteralExpression))
+				{
+					Value = (isValuePositive ? 1 : -1) * double.Parse(node.Token.ValueText);
+				}
+			}
 		}
 	}
 }
