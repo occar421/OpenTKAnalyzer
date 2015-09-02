@@ -16,65 +16,72 @@ namespace OpenTKAnalyzer.Utility.Tests
 			[TestMethod]
 			public void NormalScenario()
 			{
-				double result;
-				ExpressionSyntax expression;
+				var samples = new[] {
+					// 1
+					new Pair(1, LiteralExpression(NumericLiteralExpression, Literal(1))),
 
-				// 1
-				expression = LiteralExpression(NumericLiteralExpression, Literal(1));
-				Assert.IsTrue(NumericValueParser.TryParseFromExpression(expression, out result));
-				Assert.AreEqual(result, 1);
+					// +1
+					new Pair(1, PrefixUnaryExpression(UnaryPlusExpression, LiteralExpression(NumericLiteralExpression, Literal(1)))),
 
-				// +1
-				expression = PrefixUnaryExpression(UnaryPlusExpression, LiteralExpression(NumericLiteralExpression, Literal(1)));
-				Assert.IsTrue(NumericValueParser.TryParseFromExpression(expression, out result));
-				Assert.AreEqual(result, +1);
+					// -1
+					new Pair(-1, PrefixUnaryExpression(UnaryMinusExpression, LiteralExpression(NumericLiteralExpression, Literal(1)))),
 
-				// -1
-				expression = PrefixUnaryExpression(UnaryMinusExpression, LiteralExpression(NumericLiteralExpression, Literal(1)));
-				Assert.IsTrue(NumericValueParser.TryParseFromExpression(expression, out result));
-				Assert.AreEqual(result, -1);
+					// (1)
+					new Pair(1, ParenthesizedExpression(LiteralExpression(NumericLiteralExpression, Literal(1)))),
 
-				// (1)
-				expression = ParenthesizedExpression(LiteralExpression(NumericLiteralExpression, Literal(1)));
-				Assert.IsTrue(NumericValueParser.TryParseFromExpression(expression, out result));
-				Assert.AreEqual(result, 1);
+					// (-1)
+					new Pair(-1, ParenthesizedExpression(PrefixUnaryExpression(UnaryMinusExpression, LiteralExpression(NumericLiteralExpression, Literal(1))))),
 
-				// (-1)
-				expression = ParenthesizedExpression(PrefixUnaryExpression(UnaryMinusExpression, LiteralExpression(NumericLiteralExpression, Literal(1))));
-				Assert.IsTrue(NumericValueParser.TryParseFromExpression(expression, out result));
-				Assert.AreEqual(result, -1);
+					// -(-1)
+					new Pair(1, PrefixUnaryExpression(UnaryMinusExpression, ParenthesizedExpression(PrefixUnaryExpression(UnaryMinusExpression, LiteralExpression(NumericLiteralExpression, Literal(1))))))
+				};
 
-				// -(-1)
-				expression = PrefixUnaryExpression(UnaryMinusExpression, ParenthesizedExpression(PrefixUnaryExpression(UnaryMinusExpression, LiteralExpression(NumericLiteralExpression, Literal(1)))));
-				Assert.IsTrue(NumericValueParser.TryParseFromExpression(expression, out result));
-				Assert.AreEqual(result, 1);
+				foreach (var sample in samples)
+				{
+					double result;
+					Assert.IsTrue(NumericValueParser.TryParseFromExpression(sample.Expression, out result), $"parse error on \"{sample.Expression.ToFullString()}\"");
+					Assert.AreEqual(result, sample.Correct, $"expected {sample.Correct} but {result} | on \"{sample.Expression.ToFullString()}\"");
+				}
 			}
 
 			[TestMethod]
 			public void IncorrectScenario()
 			{
-				double result;
-				ExpressionSyntax expression;
+				var samples = new ExpressionSyntax[]
+				{
+					// "num"
+					LiteralExpression(StringLiteralExpression, Literal("num")),
 
-				// "num"
-				expression = LiteralExpression(StringLiteralExpression, Literal("num"));
-				Assert.IsFalse(NumericValueParser.TryParseFromExpression(expression, out result));
+					// name
+					IdentifierName("name"),
 
-				// name
-				expression = IdentifierName("name");
-				Assert.IsFalse(NumericValueParser.TryParseFromExpression(expression, out result));
+					// -name
+					PrefixUnaryExpression(UnaryMinusExpression, IdentifierName("name")),
 
-				// -name
-				expression = PrefixUnaryExpression(UnaryMinusExpression, IdentifierName("name"));
-				Assert.IsFalse(NumericValueParser.TryParseFromExpression(expression, out result));
+					// (name)
+					ParenthesizedExpression(IdentifierName("name")),
 
-				// (name)
-				expression = ParenthesizedExpression(IdentifierName("name"));
-				Assert.IsFalse(NumericValueParser.TryParseFromExpression(expression, out result));
+					// 1+1
+					BinaryExpression(AddExpression, LiteralExpression(NumericLiteralExpression, Literal(1)), LiteralExpression(NumericLiteralExpression, Literal(1)))
+				};
 
-				// 1+1
-				expression = BinaryExpression(AddExpression, LiteralExpression(NumericLiteralExpression, Literal(1)), LiteralExpression(NumericLiteralExpression, Literal(1)));
-                Assert.IsFalse(NumericValueParser.TryParseFromExpression(expression, out result));
+				foreach (var expression in samples)
+				{
+					double result;
+					Assert.IsFalse(NumericValueParser.TryParseFromExpression(expression, out result), $"parse mistakenly passed on \"{expression.ToFullString()}\"");
+				}
+			}
+
+			struct Pair
+			{
+				public double Correct { get; }
+				public ExpressionSyntax Expression { get; }
+
+				public Pair(double correctValue, ExpressionSyntax expression)
+				{
+					Correct = correctValue;
+					Expression = expression;
+				}
 			}
 		}
 	}
