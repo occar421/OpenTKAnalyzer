@@ -13,16 +13,16 @@ namespace OpenTKAnalyzer.Utility
 	{
 		static public bool TryParseFromExpression(ExpressionSyntax expression, out double result)
 		{
-			var walker = new DoubleExpressionWalker();
-			walker.Visit(expression);
-			result = walker.Value ?? double.NegativeInfinity;
-			return walker.Value.HasValue;
+			var parsed = ParseFromExpressionDoubleOrNull(expression);
+			result = parsed.HasValue ? parsed.Value : double.NegativeInfinity;
+			return parsed.HasValue;
 		}
 
 		static public double? ParseFromExpressionDoubleOrNull(ExpressionSyntax expression)
 		{
-			double result;
-			return (TryParseFromExpression(expression, out result)) ? (double?)result : null;
+			var walker = new DoubleExpressionWalker();
+			walker.Visit(expression);
+			return walker.Value;
 		}
 
 		static public double ParseFromExpressionDouble(ExpressionSyntax expression)
@@ -74,23 +74,27 @@ namespace OpenTKAnalyzer.Utility
 			{
 				if (node.IsKind(SyntaxKind.NumericLiteralExpression))
 				{
-					Value = (isValuePositive ? 1 : -1) * double.Parse(node.Token.ValueText);
+					double result;
+					if (double.TryParse(node.Token.ValueText, out result))
+					{
+						Value = (isValuePositive ? 1 : -1) * result;
+					}
 				}
 			}
 		}
 
 		static public bool TryParseFromExpression(ExpressionSyntax expression, out int result)
 		{
-			var walker = new IntExpressionWalker();
-			walker.Visit(expression);
-			result = walker.Value ?? int.MinValue;
-			return walker.Value.HasValue;
+			var parsed = ParseFromExpressionIntOrNull(expression);
+			result = parsed.HasValue ? parsed.Value : int.MinValue;
+			return parsed.HasValue;
 		}
 
 		static public int? ParseFromExpressionIntOrNull(ExpressionSyntax expression)
 		{
-			int result;
-			return (TryParseFromExpression(expression, out result)) ? (int?)result : null;
+			var walker = new IntExpressionWalker();
+			walker.Visit(expression);
+			return walker.Value;
 		}
 
 		static public double ParseFromExpressionInt(ExpressionSyntax expression)
@@ -142,7 +146,11 @@ namespace OpenTKAnalyzer.Utility
 			{
 				if (node.IsKind(SyntaxKind.NumericLiteralExpression))
 				{
-					Value = (isValuePositive ? 1 : -1) * int.Parse(node.Token.ValueText);
+					int result;
+					if (int.TryParse(node.Token.ValueText, out result))
+					{
+						Value = (isValuePositive ? 1 : -1) * result;
+					}
 				}
 			}
 		}
