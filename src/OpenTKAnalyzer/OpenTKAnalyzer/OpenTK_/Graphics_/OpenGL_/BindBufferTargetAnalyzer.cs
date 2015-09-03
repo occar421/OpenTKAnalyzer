@@ -68,25 +68,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 
 			var variableBindGroups = syntaxValidBinds.Select(b => b.ArgumentList)
-				.GroupBy(arg =>
-				{
-					var node = arg.Arguments.Skip(1).First().ChildNodes().First();
-					if (node is ElementAccessExpressionSyntax)
-					{
-						var identifierSymbol = context.SemanticModel.GetSymbolInfo(node.ChildNodes().First()).Symbol;
-						var index = node.ChildNodes().Skip(1).FirstOrDefault()?.WithoutTrivia();
-						return identifierSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + index.ToFullString();
-					}
-					else if (node is LiteralExpressionSyntax)
-					{
-						return null;
-					}
-					else
-					{
-						return context.SemanticModel.GetSymbolInfo(node).Symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-					}
-				})
-				.Where(g => g.Key != null); // <- constant on second argument
+				.GroupBy(arg => GetIdentifyString(arg.Arguments.Last().Expression, context.SemanticModel))
+				.Where(g => !string.IsNullOrEmpty(g.Key)); // <- constant on second argument
 			foreach (var group in variableBindGroups)
 			{
 				var targets = group.GroupBy(g => context.SemanticModel.GetSymbolInfo(g.Arguments.First().Expression)).Where(t => t.Key.Symbol != null);
@@ -100,6 +83,36 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 							messageArgs: new[] { group.Key.Split('.').Last(), string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
 					}
 				}
+			}
+		}
+
+		private static string GetIdentifyString(SyntaxNode node, SemanticModel semanticModel)
+		{
+			if (node is ElementAccessExpressionSyntax)
+			{
+				var identifierSymbol = semanticModel.GetSymbolInfo(node.ChildNodes().First()).Symbol;
+				var index = node.ChildNodes().Skip(1).FirstOrDefault()?.WithoutTrivia();
+				return identifierSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + index.ToFullString();
+			}
+			if (node is BinaryExpressionSyntax)
+			{
+				return null;
+			}
+			if (node is PostfixUnaryExpressionSyntax)
+			{
+				return null;
+			}
+			if (NumericValueParser.ParseFromExpressionDoubleOrNull(node as ExpressionSyntax).HasValue) // constant
+			{
+				return null;
+			}
+			if (node is PrefixUnaryExpressionSyntax)
+			{
+				return null;
+			}
+			else
+			{
+				return semanticModel.GetSymbolInfo(node).Symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 			}
 		}
 	}
