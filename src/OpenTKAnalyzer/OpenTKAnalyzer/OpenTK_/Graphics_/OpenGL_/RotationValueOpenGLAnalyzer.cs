@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using OpenTK.Graphics.OpenGL;
+using OpenTKAnalyzer.Utility;
 
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
@@ -40,31 +41,37 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 		private static void Analyze(SyntaxNodeAnalysisContext context)
 		{
-			var invotation = context.Node as InvocationExpressionSyntax;
+			var invocation = context.Node as InvocationExpressionSyntax;
 
 			// no arguments method filter
-			if (!invotation.ArgumentList.Arguments.Any())
+			if (!invocation.ArgumentList.Arguments.Any())
 			{
 				return;
 			}
-			if (invotation.GetFirstToken().ValueText == nameof(GL))
+			if (invocation.GetFirstToken().ValueText == nameof(GL))
 			{
-				if (invotation.Expression.GetLastToken().ValueText == nameof(GL.Rotate))
+				if (invocation.Expression.GetLastToken().ValueText == nameof(GL.Rotate))
 				{
-					var literal = invotation.ArgumentList.Arguments.First().Expression as LiteralExpressionSyntax;
-					double result;
-					if (double.TryParse(literal?.Token.ValueText, out result))
-					{
-						// perhaps degree value under 2PI is incorrect
-						if (Math.Abs(result) <= 2 * Math.PI)
-						{
-							context.ReportDiagnostic(Diagnostic.Create(
-								descriptor: Rule,
-								location: literal.GetLocation()));
-						}
-					}
+					DegreeValueAnalyze(context, invocation);
 				}
 			}
 		}
+
+		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
+		{
+			double result;
+			var argumentExpression = invocation.ArgumentList.Arguments.FirstOrDefault()?.Expression;
+			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			{
+				// perhaps degree value under 2PI is incorrect
+				if (Math.Abs(result) <= 2 * Math.PI)
+				{
+					context.ReportDiagnostic(Diagnostic.Create(
+						descriptor: Rule,
+						location: argumentExpression.GetLocation()));
+				}
+			}
+		}
+
 	}
 }
