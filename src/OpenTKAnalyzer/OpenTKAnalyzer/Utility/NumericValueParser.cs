@@ -11,6 +11,12 @@ namespace OpenTKAnalyzer.Utility
 {
 	static public class NumericValueParser
 	{
+		/// <summary>
+		/// Converts the expression syntax node of a number to its double value equivalent. A return value indicates whether the conversion succeeded or failed.
+		/// </summary>
+		/// <param name="expression">An expression syntax node containing a number to convert.</param>
+		/// <param name="result">If conversion succeeded, contains double value equivalent. If failed, contains NegativeInfinity.</param>
+		/// <returns>The conversion succeeded or failed.</returns>
 		static public bool TryParseFromExpression(ExpressionSyntax expression, out double result)
 		{
 			var parsed = ParseFromExpressionDoubleOrNull(expression);
@@ -18,6 +24,11 @@ namespace OpenTKAnalyzer.Utility
 			return parsed.HasValue;
 		}
 
+		/// <summary>
+		/// Converts the expression syntax node of a number to its double value equivalent.
+		/// </summary>
+		/// <param name="expression">An expression syntax node containing a number to convert.</param>
+		/// <returns>If conversion succeeded, contains double value equivalent. If failed, contains null.</returns>
 		static public double? ParseFromExpressionDoubleOrNull(ExpressionSyntax expression)
 		{
 			var walker = new DoubleExpressionWalker();
@@ -25,6 +36,11 @@ namespace OpenTKAnalyzer.Utility
 			return walker.Value;
 		}
 
+		/// <summary>
+		/// Converts the expression syntax node of a number to its double value equivalent.
+		/// </summary>
+		/// <param name="expression">An expression syntax node containing a number to convert.</param>
+		/// <returns>Double value equivalent.</returns>
 		static public double ParseFromExpressionDouble(ExpressionSyntax expression)
 		{
 			var result = ParseFromExpressionDoubleOrNull(expression);
@@ -83,6 +99,12 @@ namespace OpenTKAnalyzer.Utility
 			}
 		}
 
+		/// <summary>
+		/// Converts the expression syntax node of a number to its int value equivalent. A return value indicates whether the conversion succeeded or failed.
+		/// </summary>
+		/// <param name="expression">An expression syntax node containing a number to convert.</param>
+		/// <param name="result">If conversion succeeded, contains int value equivalent. If failed, contains NegativeInfinity.</param>
+		/// <returns>The conversion succeeded or failed.</returns>
 		static public bool TryParseFromExpression(ExpressionSyntax expression, out int result)
 		{
 			var parsed = ParseFromExpressionIntOrNull(expression);
@@ -90,6 +112,11 @@ namespace OpenTKAnalyzer.Utility
 			return parsed.HasValue;
 		}
 
+		/// <summary>
+		/// Converts the expression syntax node of a number to its int value equivalent.
+		/// </summary>
+		/// <param name="expression">An expression syntax node containing a number to convert.</param>
+		/// <returns>If conversion succeeded, contains int value equivalent. If failed, contains null.</returns>
 		static public int? ParseFromExpressionIntOrNull(ExpressionSyntax expression)
 		{
 			var walker = new IntExpressionWalker();
@@ -97,6 +124,11 @@ namespace OpenTKAnalyzer.Utility
 			return walker.Value;
 		}
 
+		/// <summary>
+		/// Converts the expression syntax node of a number to its int value equivalent.
+		/// </summary>
+		/// <param name="expression">An expression syntax node containing a number to convert.</param>
+		/// <returns>Int value equivalent.</returns>
 		static public double ParseFromExpressionInt(ExpressionSyntax expression)
 		{
 			var result = ParseFromExpressionIntOrNull(expression);
