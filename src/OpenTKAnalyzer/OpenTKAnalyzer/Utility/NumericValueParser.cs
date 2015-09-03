@@ -129,7 +129,7 @@ namespace OpenTKAnalyzer.Utility
 		/// </summary>
 		/// <param name="expression">An expression syntax node containing a number to convert.</param>
 		/// <returns>Int value equivalent.</returns>
-		static public double ParseFromExpressionInt(ExpressionSyntax expression)
+		static public int ParseFromExpressionInt(ExpressionSyntax expression)
 		{
 			var result = ParseFromExpressionIntOrNull(expression);
 			if (result.HasValue)
