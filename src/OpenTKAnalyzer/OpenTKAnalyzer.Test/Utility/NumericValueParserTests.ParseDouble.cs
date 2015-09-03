@@ -8,13 +8,13 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxKind;
 
 namespace OpenTKAnalyzer.Utility.Tests
 {
-	public class NumericValueParserTests
+	public partial class NumericValueParserTests
 	{
 		[TestClass]
-		public class TryParseFromExpression
+		public class ParseDouble
 		{
 			[TestMethod]
-			public void NormalScenario()
+			public void TryParseFromExpression_NormalScenario()
 			{
 				var samples = new[] {
 					// 1
@@ -45,7 +45,7 @@ namespace OpenTKAnalyzer.Utility.Tests
 			}
 
 			[TestMethod]
-			public void IncorrectScenario()
+			public void TryParseFromExpression_IncorrectScenario()
 			{
 				var samples = new ExpressionSyntax[]
 				{
