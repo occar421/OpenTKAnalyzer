@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using OpenTK.Graphics.OpenGL;
+using OpenTKAnalyzer.Utility;
 
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
@@ -58,7 +59,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 			var syntaxValidBinds = bindBuffers.Where(b => b.ArgumentList.Arguments.Count == 2);
 			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Last().Expression)
-				.OfType<LiteralExpressionSyntax>().Where(l => int.Parse(l.Token.ValueText) != 0);
+				.Where(e => { var r = NumericValueParser.ParseFromExpressionIntOrNull(e); return r.HasValue && r.Value != 0; }); // null(not constant) or 0 are valid so be false
 			foreach (var bindLiteral in constantInvalidBinds)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
