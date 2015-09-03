@@ -1,10 +1,12 @@
 # OpenTKAnalyzer
 Analyzer for OpenTK (unofficial)  
 This project is just started. Your ideas and pull requests(of course issues) are WELCOME!
+```
+PM> Install-Package OpenTKAnalyzer -Pre
+```
 
 ## Status
 [![Issues](https://img.shields.io/github/issues/occar421/opentkanalyzer.svg?style=flat-square)](https://github.com/occar421/OpenTKAnalyzer/issues)
-[![Release](https://img.shields.io/github/release/occar421/opentkanalyzer.svg?style=flat-square)](https://github.com/occar421/opentkanalyzer/releases/latest)
 [![NuGet Version](https://img.shields.io/nuget/v/OpenTKAnalyzer.svg?style=flat-square)](https://www.nuget.org/packages/OpenTKAnalyzer/)
 [![NuGet Donwloads](https://img.shields.io/nuget/dt/OpenTKAnalyzer.svg?style=flat-square)](https://www.nuget.org/packages/OpenTKAnalyzer/)
 [![License](https://img.shields.io/github/license/occar421/opentkanalyzer.svg?style=flat-square)](https://github.com/occar421/OpenTKAnalyzer/blob/master/LICENSE)
@@ -21,7 +23,10 @@ Currently, this contains analyzers below.
 + Prevent mistakes of degree value and radian value in OpenTK Math Library.
 + GL.PushMatrix and GL.PopMatrix conformity. Other Push Pop functions are supported.
 + Check lighting enabling by GL.Enable.
-+ Check GL.Light param(third argument) type is correct. 
++ Check GL.Light param(third argument) type is correct.
+
+***0.1.1-alpha***
++ Fix bug on minus prefixed value. (Analyzer for OpenTK Math Library)
 
 ## Versioning
 In appveyor.yml line 1, version is defined. And stage(alpha, beta or release) is line 3.
