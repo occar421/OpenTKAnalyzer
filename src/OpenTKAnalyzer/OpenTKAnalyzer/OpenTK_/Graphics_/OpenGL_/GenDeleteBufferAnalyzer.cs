@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using OpenTK.Graphics.OpenGL;
+using OpenTKAnalyzer.Utility;
 
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
@@ -65,9 +66,6 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
 			var genBufferOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.GenBuffer));
-			var genBuffersOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.GenBuffers));
-			var deleteBufferOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
-			var deleteBuffersOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.DeleteBuffers));
 
 			var notUsedGenBufferOps = genBufferOps.Where(g => !g.Parent.IsKind(SyntaxKind.SimpleAssignmentExpression) && !g.Parent.IsKind(SyntaxKind.EqualsValueClause));
 			foreach (var genOp in notUsedGenBufferOps)
@@ -77,9 +75,9 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: genOp.GetLocation()));
 			}
 
-			var firstArgConstantGenBuffersOps = genBuffersOps.Select(g => g.ArgumentList.Arguments.FirstOrDefault()?.Expression)
-				.OfType<LiteralExpressionSyntax>();
-			var invalidFirstArgGenBuffersOps = firstArgConstantGenBuffersOps.Where(l => { double val; return double.TryParse(l.Token.ValueText, out val) && val < 1; });
+			var genBuffersOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.GenBuffers));
+			var invalidFirstArgGenBuffersOps = genBuffersOps.Select(g => g.ArgumentList.Arguments.FirstOrDefault()?.Expression)
+				.Where(e => { var v = NumericValueParser.ParseFromExpressionIntOrNull(e); return !v.HasValue || v.Value < 1; });
 			foreach (var genOp in invalidFirstArgGenBuffersOps)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
@@ -87,8 +85,9 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: genOp.GetLocation()));
 			}
 
+			var deleteBufferOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
 			var invalidDeleteBufferOps = deleteBufferOps.Select(d => d.ArgumentList.Arguments.FirstOrDefault()?.Expression)
-				.OfType<LiteralExpressionSyntax>();
+				.Where(e => NumericValueParser.ParseFromExpressionIntOrNull(e).HasValue);
 			foreach (var deleteLiteral in invalidDeleteBufferOps)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
@@ -97,6 +96,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					messageArgs: nameof(GL) + "." + nameof(GL.DeleteBuffer)));
 			}
 
+			var deleteBuffersOps = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.DeleteBuffers));
 			// TODO: GL.GenBuffers and GL.DeleteBuffers
 		}
 	}
