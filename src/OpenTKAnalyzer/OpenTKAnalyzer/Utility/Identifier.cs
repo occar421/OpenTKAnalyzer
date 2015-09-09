@@ -19,6 +19,10 @@ namespace OpenTKAnalyzer.Utility
 		/// <returns>indentity string</returns>
 		static public string GetVariableString(ExpressionSyntax expression, SemanticModel semanticModel)
 		{
+			if (expression == null)
+			{
+				return null;
+			}
 			if (expression is ElementAccessExpressionSyntax)
 			{
 				var identifierSymbol = semanticModel.GetSymbolInfo(expression.ChildNodes().First()).Symbol;
