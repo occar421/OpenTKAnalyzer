@@ -13,6 +13,10 @@ namespace OpenTKAnalyzer.Utility
 	{
 		public static string GetMethodName(this InvocationExpressionSyntax invocation)
 		{
+			if (invocation == null)
+			{
+				throw new ArgumentNullException(nameof(invocation));
+			}
 			return invocation.Expression.WithoutTrivia().ToFullString();
 		}
 
@@ -20,7 +24,7 @@ namespace OpenTKAnalyzer.Utility
 		{
 			if (n < 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(n), nameof(n) + " >= 0");
+				throw new ArgumentOutOfRangeException(nameof(n), "Must be " + nameof(n) + " >= 0");
 			}
 
 			return invocation?.ArgumentList.Arguments.Skip(n).FirstOrDefault()?.Expression;
