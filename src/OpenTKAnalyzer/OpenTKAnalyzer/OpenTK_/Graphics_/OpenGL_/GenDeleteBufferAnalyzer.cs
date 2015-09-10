@@ -23,8 +23,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		private const string NotUsedMessageFormat = "Generated buffer by this " + nameof(GL) + "." + nameof(GL.GenBuffer) + " is not used.";
 		private const string BuffersNumberMessageFormat = "{0} accepts larger than 0 value on 1st argument.";
 		private const string GenDeleteOneBufferMessageFormat = "First argument must be 1 when second argument is variable of int or uint.";
-		private const string DuplexGenBuffersMessageFormat = "The variable \"{0}\" is used in multiple " + nameof(GL) + "." + nameof(GL.GenBuffers) + ".";
-		private const string DuplexDeleteBuffersMessageFormat = "The variable \"{0}\" is used in multiple " + nameof(GL) + "." + nameof(GL.DeleteBuffers) + ".";
+		private const string DuplexMessageFormat = "The variable \"{0}\" is used in multiple {1}.";
 		private const string LackGenBuffersMessageFormat = "The variable \"{0}\" is used deleting but not generating.";
 		private const string LackDeleteBuffersMessageFormat = "The variable \"{0}\" is used generating but not deleting.";
 		private const string GenDeleteNumberOfBuffersMessageFormat = nameof(GL) + "." + nameof(GL.GenBuffers) + " and " + nameof(GL) + "." + nameof(GL.DeleteBuffers) + " of the variable \"{0}\" may have different number of buffer.";
@@ -67,19 +66,10 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			isEnabledByDefault: true,
 			description: Description);
 
-		internal static DiagnosticDescriptor DuplexGenBuffersRule = new DiagnosticDescriptor(
+		internal static DiagnosticDescriptor DuplexBuffersRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: DuplexGenBuffersMessageFormat,
-			category: Category,
-			defaultSeverity: DiagnosticSeverity.Warning,
-			isEnabledByDefault: true,
-			description: Description);
-
-		internal static DiagnosticDescriptor DuplexDeleteBuffersRule = new DiagnosticDescriptor(
-			id: DiagnosticId,
-			title: Title,
-			messageFormat: DuplexDeleteBuffersMessageFormat,
+			messageFormat: DuplexMessageFormat,
 			category: Category,
 			defaultSeverity: DiagnosticSeverity.Warning,
 			isEnabledByDefault: true,
@@ -113,7 +103,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			description: Description);
 
 
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NoConstantRule, NotUsedRule, BuffersNumberRule, GenDeleteOneBufferRule, DuplexGenBuffersRule, DuplexDeleteBuffersRule, LackGenBuffersRule, LackDeleteBuffersRule, GenDeleteNumberOfBuffersRule);
+		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NoConstantRule, NotUsedRule, BuffersNumberRule, GenDeleteOneBufferRule, DuplexBuffersRule, LackGenBuffersRule, LackDeleteBuffersRule, GenDeleteNumberOfBuffersRule);
 
 		public override void Initialize(AnalysisContext context)
 		{
@@ -145,7 +135,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: genOp.GetNthArgumentExpression(0).GetLocation(),
 					messageArgs: nameof(GL) + "." + nameof(GL.GenBuffers)));
 			}
-			foreach (var genOp in FindNotOneInvalid(firstArgConstGenBuffersOps, context.SemanticModel))
+			foreach (var genOp in FindNotOneInvalid(firstArgConstGenBuffersOps))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: GenDeleteOneBufferRule,
@@ -171,7 +161,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: deleteOp.GetNthArgumentExpression(0).GetLocation(),
 					messageArgs: nameof(GL) + "." + nameof(GL.DeleteBuffers)));
 			}
-			foreach (var deleteOp in FindNotOneInvalid(firstArgConstDeleteBuffersOps, context.SemanticModel))
+			foreach (var deleteOp in FindNotOneInvalid(firstArgConstDeleteBuffersOps))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: GenDeleteOneBufferRule,
@@ -193,10 +183,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var delete in deleteOps)
 					{
+						var variableName = key.Split('.').Last();
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: LackGenBuffersRule,
 							location: delete.Item1.GetLocation(),
-							messageArgs: key.Split('.').Last()));
+							messageArgs: variableName));
 					}
 					isGenOpValid = false;
 				}
@@ -204,10 +195,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var gen in genOps)
 					{
+						var variableName = key.Split('.').Last();
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: LackDeleteBuffersRule,
 							location: gen.Item1.GetLocation(),
-							messageArgs: key.Split('.').Last()));
+							messageArgs: variableName));
 					}
 					isDeleteOpValid = false;
 				}
@@ -216,10 +208,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var gen in genOps)
 					{
+						var variableName = key.Split('.').Last();
 						context.ReportDiagnostic(Diagnostic.Create(
-							descriptor: DuplexGenBuffersRule,
+							descriptor: DuplexBuffersRule,
 							location: gen.Item1.GetLocation(),
-							messageArgs: key.Split('.').Last()));
+							messageArgs: new[] { variableName, nameof(GL) + "." + nameof(GL.GenBuffers) }));
 					}
 					isGenOpValid = false;
 				}
@@ -227,10 +220,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var delete in deleteOps)
 					{
+						var variableName = key.Split('.').Last();
 						context.ReportDiagnostic(Diagnostic.Create(
-							descriptor: DuplexDeleteBuffersRule,
+							descriptor: DuplexBuffersRule,
 							location: delete.Item1.GetLocation(),
-							messageArgs: key.Split('.').Last()));
+							messageArgs: new[] { variableName, nameof(GL) + "." + nameof(GL.DeleteBuffers) }));
 					}
 					isDeleteOpValid = false;
 				}
@@ -247,26 +241,28 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					if (genOp.Item2.Value != deleteOp.Item2.Value)
 					{
+						var variableName = key.Split('.').Last();
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: GenDeleteNumberOfBuffersRule,
 							location: genOp.Item1.GetLocation(),
-							messageArgs: key));
+							messageArgs: variableName));
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: GenDeleteNumberOfBuffersRule,
 							location: deleteOp.Item1.GetLocation(),
-							messageArgs: key));
+							messageArgs: variableName));
 					}
 				}
 				else if (genOp.Item2.HasValue || deleteOp.Item2.HasValue) // XOR so one is constant and another is variable
 				{
+					var variableName = key.Split('.').Last();
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: GenDeleteNumberOfBuffersRule,
 						location: genOp.Item1.GetLocation(),
-						messageArgs: key));
+						messageArgs: variableName));
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: GenDeleteNumberOfBuffersRule,
 						location: deleteOp.Item1.GetLocation(),
-						messageArgs: key));
+						messageArgs: variableName));
 				}
 			}
 		}
@@ -281,12 +277,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			return ops.Where(o => o.Item2.HasValue && o.Item2.Value < 1).Select(o => o.Item1);
 		}
 
-		private static IEnumerable<InvocationExpressionSyntax> FindNotOneInvalid(IEnumerable<Tuple<InvocationExpressionSyntax, int?>> ops, SemanticModel semanticModel)
+		private static IEnumerable<InvocationExpressionSyntax> FindNotOneInvalid(IEnumerable<Tuple<InvocationExpressionSyntax, int?>> ops)
 		{
-			return ops.Where(g => g.Item2.HasValue && g.Item2.Value != 1).Where(g => g.Item1.GetNthArgumentExpression(1) != null)
-				.Select(g => new { Invocation = g.Item1, TypeName = semanticModel.GetTypeInfo(g.Item1.GetNthArgumentExpression(1)).Type?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) })
-				.Where(g => g.TypeName == "int" || g.TypeName == "uint")
-				.Select(g => g.Invocation);
+			return ops.Where(o => { var keyword = (o.Item1.GetNthArgumentExpression(1)?.Parent as ArgumentSyntax)?.RefOrOutKeyword; return keyword.HasValue && !keyword.Value.IsKind(SyntaxKind.None); })
+				.Where(o => o.Item2.HasValue && o.Item2.Value != 1)
+				.Select(o => o.Item1);
 		}
 
 		private static IEnumerable<IGrouping<string, Tuple<InvocationExpressionSyntax, int?>>> GroupByVariableName(IEnumerable<Tuple<InvocationExpressionSyntax, int?>> ops, SemanticModel semanticModel)
