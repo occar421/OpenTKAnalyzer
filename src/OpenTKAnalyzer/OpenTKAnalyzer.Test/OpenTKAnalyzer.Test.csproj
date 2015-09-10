@@ -116,6 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper\DiagnosticResultLocation.cs" />
     <Compile Include="TestHelper\DiagnosticVerifier.cs" />
+    <Compile Include="Utility\IdentifierTests.GetVariableString.cs" />
     <Compile Include="Utility\NumericValueParserTests.ParseInt.cs" />
     <Compile Include="Utility\NumericValueParserTests.ParseDouble.cs" />
   </ItemGroup>
