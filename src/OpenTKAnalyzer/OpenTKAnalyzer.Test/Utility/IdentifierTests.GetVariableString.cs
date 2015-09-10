@@ -20,8 +20,7 @@ namespace OpenTKAnalyzer.Utility.Tests
 			static SyntaxNode syntaxRoot;
 			static MethodDeclarationSyntax method1;
 			static InvocationExpressionSyntax[] invocations;
-			static string source = @"
-namespace Namespace1
+			static string source = @"namespace Namespace1
 {
 	class Class1
 	{
@@ -29,6 +28,7 @@ namespace Namespace1
 		float[] b = new float[2];
 		static string c = string.Empty;
 		const decimal d = 10.3m;
+		double E { get; set; }
 		void Method1()
 		{
 			var a = new Class1();
@@ -43,10 +43,11 @@ namespace Namespace1
 			Method2(Class1.c);
 			Method2(c());
 			Method2(d);
+			Method2(E);
+			Method3(Method1);
 		}
-		void Method2(object anything)
-		{
-		}
+		void Method2(object anything) { }
+		void Method3(System.Action method) { }
 	}
 }
 ";
@@ -87,45 +88,45 @@ namespace Namespace1
 			public void LocalVariableAgainstThisNode()
 			{
 				var localVariableNode = invocations[1].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("a", Identifier.GetVariableString(localVariableNode, semanticModel));
+				Assert.AreEqual("(Namespace1.Class1.Method1).a", Identifier.GetVariableString(localVariableNode, semanticModel));
 			}
 
 			[TestMethod]
 			public void ThisVariableNode()
 			{
 				var thisVariableNode = invocations[2].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("a", Identifier.GetVariableString(thisVariableNode, semanticModel));
+				Assert.AreEqual("Namespace1.Class1.a", Identifier.GetVariableString(thisVariableNode, semanticModel));
 			}
 
 			[TestMethod]
 			public void ArrayVariableNode()
 			{
 				var arrayVariableNode = invocations[3].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("b", Identifier.GetVariableString(arrayVariableNode, semanticModel));
+				Assert.AreEqual("Namespace1.Class1.b", Identifier.GetVariableString(arrayVariableNode, semanticModel));
 			}
 
 			[TestMethod]
 			public void ArrayIndexedVariableNode()
 			{
 				var index0Node = invocations[4].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("b[0]", Identifier.GetVariableString(index0Node, semanticModel));
+				Assert.AreEqual("Namespace1.Class1.b[0]", Identifier.GetVariableString(index0Node, semanticModel));
 
 				var index1Node = invocations[5].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("b[1]", Identifier.GetVariableString(index1Node, semanticModel));
+				Assert.AreEqual("Namespace1.Class1.b[1]", Identifier.GetVariableString(index1Node, semanticModel));
 			}
 
 			[TestMethod]
 			public void LocalVariableAgainstStaticNode()
 			{
 				var variableNode = invocations[6].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("c", Identifier.GetVariableString(variableNode, semanticModel));
+				Assert.AreEqual("(Namespace1.Class1.Method1).c", Identifier.GetVariableString(variableNode, semanticModel));
 			}
 
 			[TestMethod]
 			public void StaticVariableWithClassNameNode()
 			{
 				var variableNode = invocations[7].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("c", Identifier.GetVariableString(variableNode, semanticModel));
+				Assert.AreEqual("Namespace1.Class1.c", Identifier.GetVariableString(variableNode, semanticModel));
 			}
 
 			[TestMethod]
@@ -139,7 +140,21 @@ namespace Namespace1
 			public void ConstNode()
 			{
 				var constNode = invocations[9].ArgumentList.Arguments.First().Expression;
-				Assert.AreEqual("d", Identifier.GetVariableString(constNode, semanticModel));
+				Assert.AreEqual("Namespace1.Class1.d", Identifier.GetVariableString(constNode, semanticModel));
+			}
+
+			[TestMethod]
+			public void PropertyNode()
+			{
+				var propertyNode = invocations[10].ArgumentList.Arguments.First().Expression;
+				Assert.AreEqual("Namespace1.Class1.E", Identifier.GetVariableString(propertyNode, semanticModel));
+			}
+
+			[TestMethod]
+			public void MethodNode()
+			{
+				var methodNode = invocations[11].ArgumentList.Arguments.First().Expression;
+				Assert.AreEqual("Namespace1.Class1.Method1", Identifier.GetVariableString(methodNode, semanticModel));
 			}
 		}
 	}
