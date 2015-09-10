@@ -16,23 +16,19 @@ namespace OpenTKAnalyzer.Utility.Tests
 		public class GetMethodName
 		{
 			static InvocationExpressionSyntax[] invocations;
-			static string source = @"
-using System;
-namespace Namespace1
+			static string source = @"using System;
+class Class1
 {
-	class Class1
+	void Method1()
 	{
-		void Method1()
-		{
-			ToString();
-			Console.WriteLine();
-			DateTime.Today.ToString();
-		}
+		ToString();
+		Console.WriteLine();
+		DateTime.Today.ToString();
 	}
 }";
 
 			[ClassInitialize]
-			public static void ClassInitialize()
+			public static void ClassInitialize(TestContext context)
 			{
 				var tree = CSharpSyntaxTree.ParseText(source);
 				var root = tree.GetRoot();

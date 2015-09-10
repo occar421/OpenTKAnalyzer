@@ -16,15 +16,11 @@ namespace OpenTKAnalyzer.Utility.Tests
 		public class GetNthArgumentExpression
 		{
 			static InvocationExpressionSyntax invocation;
-			static string source = @"
-namespace Namespace1
+			static string source = @"class Class1
 {
-	class Class1
+	void Method1()
 	{
-		void Method1()
-		{
-			System.Console.WriteLine(""str"", 1, 2, 3, 4);
-		}
+		System.Console.WriteLine(""str"", 1, 2, 3, 4);
 	}
 }";
 
