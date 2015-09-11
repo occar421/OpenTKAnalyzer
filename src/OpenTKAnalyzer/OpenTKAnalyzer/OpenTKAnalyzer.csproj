@@ -33,6 +33,7 @@
     <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\FogParamAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\RotationValueOpenGLAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\BindBufferTargetAnalyzer.cs" />
     <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\PushPopAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzer.cs" />
