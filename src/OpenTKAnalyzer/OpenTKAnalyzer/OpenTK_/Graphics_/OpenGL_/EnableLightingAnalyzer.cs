@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-
+using OpenTKAnalyzer.Utility;
 
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
@@ -42,7 +42,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var root = await context.SemanticModel.SyntaxTree.GetRootAsync();
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var lights = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.Light));
+			var lights = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.Light));
 			var useLights = new bool[8];
 			var lightLocations = new List<Location>[8];
 			for (int i = 0; i < lightLocations.Length; i++)
@@ -51,7 +51,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 			foreach (var lightOp in lights)
 			{
-				var expression = lightOp.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes()?.First();
+				var expression = lightOp.GetNthArgumentExpression(0);
 				if (expression == null)
 				{
 					continue;
@@ -62,7 +62,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					continue;
 				}
 				int number;
-				if (symbol.Name.Length > 5 && int.TryParse(symbol.Name.Substring(5), out number))
+				if (symbol.Name.Length > 5 && int.TryParse(symbol.Name.Substring(5), out number) && 0 <= number && number < 8)
 				{
 					useLights[number] = true;
 					lightLocations[number].Add(lightOp.GetLocation());
@@ -74,13 +74,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 
 			// need light enabling
-			var enables = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.Enable));
+			var enables = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.Enable));
 			var enableLights = new bool[8];
 			var enableWholeLighting = false;
 			var enableLocations = new List<Location>();
 			foreach (var enableOp in enables)
 			{
-				var expression = enableOp.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes()?.First();
+				var expression = enableOp.GetNthArgumentExpression(0);
 				if (expression == null)
 				{
 					continue;
@@ -96,7 +96,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					continue;
 				}
 				int number;
-				if (symbol.Name.Length > 5 && int.TryParse(symbol.Name.Substring(5), out number))
+				if (symbol.Name.Length > 5 && int.TryParse(symbol.Name.Substring(5), out number) && 0 <= number && number < 8)
 				{
 					enableLights[number] = true;
 					enableLocations.Add(enableOp.GetLocation());
@@ -111,7 +111,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: Rule,
 							location: location,
-							messageArgs: nameof(GL) + "." + nameof(GL.Enable) + "(" + nameof(EnableCap) + ".Light" + i + ")"));
+							messageArgs: $"{nameof(GL)}.{nameof(GL.Enable)}({nameof(EnableCap)}.Light{i})"));
 					}
 				}
 			}
@@ -122,7 +122,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: Rule,
 						location: location,
-						messageArgs: nameof(GL) + "." + nameof(GL.Enable) + "(" + nameof(EnableCap) + "." + nameof(EnableCap.Lighting) + ")"));
+						messageArgs: $"{nameof(GL)}.{nameof(GL.Enable)}({nameof(EnableCap)}.{nameof(EnableCap.Lighting)})"));
 				}
 			}
 		}
