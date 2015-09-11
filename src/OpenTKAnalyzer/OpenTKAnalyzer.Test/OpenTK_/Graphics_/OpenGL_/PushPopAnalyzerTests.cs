@@ -66,35 +66,35 @@ class Class1
 					Id = PushPopAnalyzer.DiagnosticId,
 					Message = "Missing GL.PopMatrix.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = PushPopAnalyzer.DiagnosticId,
 					Message = "Missing GL.PopName.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = PushPopAnalyzer.DiagnosticId,
 					Message = "Missing GL.PushMatrix.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = PushPopAnalyzer.DiagnosticId,
 					Message = "Missing GL.PushClientAttrib.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = PushPopAnalyzer.DiagnosticId,
 					Message = "Missing GL.PushMatrix.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 15, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 15, 3)
 				});
 		}
 	}

@@ -88,21 +88,21 @@ class Class1
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "GL.BindBuffer accepts variable or 0 on 2nd argument.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 43) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 43)
 				});
 		}
 
@@ -132,21 +132,21 @@ class Class1
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "GL.BindBuffer accepts variable or 0 on 2nd argument.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 30) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 30)
 				});
 		}
 	}

@@ -53,14 +53,14 @@ class Class1
 					Id = RotationValueOpenGLAnalyzer.DiagnosticId,
 					Message = "GL.Rotate accepts degree value.",
 					Severity = DiagnosticSeverity.Info,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 13) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 13)
 				},
 				new DiagnosticResult()
 				{
 					Id = RotationValueOpenGLAnalyzer.DiagnosticId,
 					Message = "GL.Rotate accepts degree value.",
 					Severity = DiagnosticSeverity.Info,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 13) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 13)
 				});
 		}
 	}

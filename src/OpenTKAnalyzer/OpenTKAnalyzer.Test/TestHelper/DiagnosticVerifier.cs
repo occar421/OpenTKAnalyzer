@@ -97,18 +97,7 @@ namespace OpenTKAnalyzer.TestHelper
 				}
 				else
 				{
-					VerifyDiagnosticLocation(analyzer, actual, actual.Location, expected.Locations.First());
-					var additionalLocations = actual.AdditionalLocations.ToArray();
-
-					if (additionalLocations.Length != expected.Locations.Length - 1)
-					{
-						Assert.Fail($"Expected {expected.Locations.Length - 1} additional locations but got {additionalLocations.Length} for Diagnostic:{NewLine}    {FormatDiagnostics(analyzer, actual)}{NewLine}");
-					}
-
-					for (int j = 0; j < additionalLocations.Length; j++)
-					{
-						VerifyDiagnosticLocation(analyzer, actual, additionalLocations[j], expected.Locations[j + 1]);
-					}
+					VerifyDiagnosticLocation(analyzer, actual, actual.Location, expected.Location);
 				}
 
 				if (actual.Id != expected.Id)
