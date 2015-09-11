@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using OpenTK;
+using OpenTKAnalyzer.Utility;
 
 namespace OpenTKAnalyzer.OpenTK_
 {
@@ -71,17 +72,7 @@ namespace OpenTKAnalyzer.OpenTK_
 					case nameof(MathHelper.DegreesToRadians):
 						{
 							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-							if (argumentExpression is PrefixUnaryExpressionSyntax)
-							{
-								var s = argumentExpression as PrefixUnaryExpressionSyntax;
-								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
-							}
-							else if (argumentExpression is LiteralExpressionSyntax)
-							{
-								var s = argumentExpression as LiteralExpressionSyntax;
-								literalString = s.Token.ValueText;
-							}
-							if (double.TryParse(literalString, out result))
+							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
 							{
 								// perhaps degree value under 2PI is incorrect
 								if (Math.Abs(result) <= 2 * Math.PI)
@@ -102,17 +93,7 @@ namespace OpenTKAnalyzer.OpenTK_
 					case nameof(MathHelper.RadiansToDegrees):
 						{
 							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-							if (argumentExpression is PrefixUnaryExpressionSyntax)
-							{
-								var s = argumentExpression as PrefixUnaryExpressionSyntax;
-								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
-							}
-							else if (argumentExpression is LiteralExpressionSyntax)
-							{
-								var s = argumentExpression as LiteralExpressionSyntax;
-								literalString = s.Token.ValueText;
-							}
-							if (double.TryParse(literalString, out result))
+							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
 							{
 								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
@@ -145,17 +126,7 @@ namespace OpenTKAnalyzer.OpenTK_
 					case nameof(Matrix2.CreateRotation):
 						{
 							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-							if (argumentExpression is PrefixUnaryExpressionSyntax)
-							{
-								var s = argumentExpression as PrefixUnaryExpressionSyntax;
-								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
-							}
-							else if (argumentExpression is LiteralExpressionSyntax)
-							{
-								var s = argumentExpression as LiteralExpressionSyntax;
-								literalString = s.Token.ValueText;
-							}
-							if (double.TryParse(literalString, out result))
+							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
 							{
 								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
@@ -176,17 +147,7 @@ namespace OpenTKAnalyzer.OpenTK_
 						{
 							// number is in second argument
 							var argumentExpression = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression;
-							if (argumentExpression is PrefixUnaryExpressionSyntax)
-							{
-								var s = argumentExpression as PrefixUnaryExpressionSyntax;
-								literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
-							}
-							else if (argumentExpression is LiteralExpressionSyntax)
-							{
-								var s = argumentExpression as LiteralExpressionSyntax;
-								literalString = s.Token.ValueText;
-							}
-							if (double.TryParse(literalString, out result))
+							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
 							{
 								// radian value usually under 2PI
 								if (Math.Abs(result) >= 2 * Math.PI)
@@ -209,17 +170,7 @@ namespace OpenTKAnalyzer.OpenTK_
 					methodName.StartsWith("Rotate"))
 				{
 					var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-					if (argumentExpression is PrefixUnaryExpressionSyntax)
-					{
-						var s = argumentExpression as PrefixUnaryExpressionSyntax;
-						literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
-					}
-					else if (argumentExpression is LiteralExpressionSyntax)
-					{
-						var s = argumentExpression as LiteralExpressionSyntax;
-						literalString = s.Token.ValueText;
-					}
-					if (double.TryParse(literalString, out result))
+					if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
 					{
 						// radian value usually under 2PI
 						if (Math.Abs(result) >= 2 * Math.PI)
@@ -243,17 +194,7 @@ namespace OpenTKAnalyzer.OpenTK_
 				{
 					// number is in second argument
 					var argumentExpression = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression;
-					if (argumentExpression is PrefixUnaryExpressionSyntax)
-					{
-						var s = argumentExpression as PrefixUnaryExpressionSyntax;
-						literalString = s.OperatorToken.ValueText + (s.Operand as LiteralExpressionSyntax)?.Token.ValueText;
-					}
-					else if (argumentExpression is LiteralExpressionSyntax)
-					{
-						var s = argumentExpression as LiteralExpressionSyntax;
-						literalString = s.Token.ValueText;
-					}
-					if (double.TryParse(literalString, out result))
+					if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
 					{
 						// radian value usually under 2PI
 						if (Math.Abs(result) >= 2 * Math.PI)
