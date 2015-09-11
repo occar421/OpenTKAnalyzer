@@ -116,8 +116,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
+			// check for GL.GenBuffer (single one)
 			var genBufferOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.GenBuffer));
-
 			var notUsedGenBufferOps = genBufferOps.Where(g => !g.Parent.IsKind(SyntaxKind.SimpleAssignmentExpression) && !g.Parent.IsKind(SyntaxKind.EqualsValueClause));
 			foreach (var genOp in notUsedGenBufferOps)
 			{
@@ -126,6 +126,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: genOp.GetLocation()));
 			}
 
+			// check for GL.GenBuffers (multiple one)
 			var genBuffersOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.GenBuffers));
 			var firstArgConstGenBuffersOps = GetFirstArgConstInt(genBuffersOps);
 			foreach (var genOp in FindNonNatural(firstArgConstGenBuffersOps))
@@ -142,6 +143,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: genOp.GetNthArgumentExpression(0).GetLocation()));
 			}
 
+			// check for GL.DeleteBuffer (single one)
 			var deleteBufferOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
 			var invalidDeleteBufferOps = GetFirstArgConstInt(deleteBufferOps).Where(o => o.Item2.HasValue);
 			foreach (var deleteLiteral in invalidDeleteBufferOps)
@@ -152,6 +154,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					messageArgs: nameof(GL) + "." + nameof(GL.DeleteBuffer)));
 			}
 
+			// check for GL.DeleteBuffers (multiple one)
 			var deleteBuffersOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.DeleteBuffers));
 			var firstArgConstDeleteBuffersOps = GetFirstArgConstInt(deleteBuffersOps);
 			foreach (var deleteOp in FindNonNatural(firstArgConstDeleteBuffersOps))
@@ -168,9 +171,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: deleteOp.GetNthArgumentExpression(0).GetLocation()));
 			}
 
+			// GL.GenBuffers and GL.DeleteBuffers complex inspection
 			var genOpGroupsById = GroupByVariableName(firstArgConstGenBuffersOps, context.SemanticModel);
 			var deleteOpGroupsById = GroupByVariableName(firstArgConstDeleteBuffersOps, context.SemanticModel);
 
+			// pick up all variable names
 			var allKeys = Enumerable.Union(genOpGroupsById.Select(g => g.Key), deleteOpGroupsById.Select(d => d.Key));
 			foreach (var key in allKeys)
 			{
@@ -252,7 +257,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 							messageArgs: variableName));
 					}
 				}
-				else if (genOp.Item2.HasValue || deleteOp.Item2.HasValue) // XOR so one is constant and another is variable
+				// one is constant and another is variable so this usually wrong
+				else if (genOp.Item2.HasValue || deleteOp.Item2.HasValue)
 				{
 					var variableName = key.Split('.').Last();
 					context.ReportDiagnostic(Diagnostic.Create(
