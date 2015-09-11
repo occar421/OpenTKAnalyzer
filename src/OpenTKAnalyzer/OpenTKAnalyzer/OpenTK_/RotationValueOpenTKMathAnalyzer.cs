@@ -23,9 +23,6 @@ namespace OpenTKAnalyzer.OpenTK_
 		private const string Description = "Warm on literal in argument seems invalid style(radian or degree).";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK);
 
-		private const string RadianString = "radian";
-		private const string DegreeString = "degree";
-
 		internal static DiagnosticDescriptor WarningRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
@@ -52,159 +49,107 @@ namespace OpenTKAnalyzer.OpenTK_
 
 		private static void Analyze(SyntaxNodeAnalysisContext context)
 		{
-			var invotation = context.Node as InvocationExpressionSyntax;
+			var invocation = context.Node as InvocationExpressionSyntax;
 
 			// no arguments method filter
-			if (!invotation.ArgumentList.Arguments.Any())
+			if (!invocation.ArgumentList.Arguments.Any())
 			{
 				return;
 			}
 
-			double result;
-			string literalString = string.Empty;
 			// MathHelper
-			var baseName = invotation.GetFirstToken().ValueText;
+			var baseName = invocation.GetFirstToken().ValueText;
 			if (baseName == nameof(MathHelper))
 			{
 				// check method
-				switch (invotation.Expression.GetLastToken().ValueText)
+				switch (invocation.Expression.GetLastToken().ValueText)
 				{
 					case nameof(MathHelper.DegreesToRadians):
-						{
-							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
-							{
-								// perhaps degree value under 2PI is incorrect
-								if (Math.Abs(result) <= 2 * Math.PI)
-								{
-									context.ReportDiagnostic(Diagnostic.Create(
-										descriptor: InfoRule,
-										location: argumentExpression.GetLocation(),
-										messageArgs: new[]
-										{
-											nameof(MathHelper) + "." + nameof(MathHelper.DegreesToRadians),
-											DegreeString
-										}));
-								}
-							}
-						}
-						return;
+						DegreeValueAnalyze(context, invocation, 0, nameof(MathHelper) + "." + nameof(MathHelper.DegreesToRadians));
+						break;
 
 					case nameof(MathHelper.RadiansToDegrees):
-						{
-							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
-							{
-								// radian value usually under 2PI
-								if (Math.Abs(result) >= 2 * Math.PI)
-								{
-									context.ReportDiagnostic(Diagnostic.Create(
-										descriptor: WarningRule,
-										location: argumentExpression.GetLocation(),
-										messageArgs: new[]
-										{
-											nameof(MathHelper) + "." + nameof(MathHelper.RadiansToDegrees),
-											RadianString
-										}));
-								}
-							}
-						}
-						return;
-					default:
-						return;
+						RadianValueAnalyze(context, invocation, 0, nameof(MathHelper) + "." + nameof(MathHelper.RadiansToDegrees));
+						break;
 				}
+				return;
 			}
 
 			// Matrix2, Matrix3x4 etc...
 			if (baseName.StartsWith("Matrix"))
 			{
 				// check method
-				var methodName = invotation.Expression.GetLastToken().ValueText;
+				var methodName = invocation.Expression.GetLastToken().ValueText;
 				switch (methodName)
 				{
 					// Matrix? or Matrix?x$(? or $ is 2)
 					case nameof(Matrix2.CreateRotation):
-						{
-							var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
-							{
-								// radian value usually under 2PI
-								if (Math.Abs(result) >= 2 * Math.PI)
-								{
-									context.ReportDiagnostic(Diagnostic.Create(
-										descriptor: WarningRule,
-										location: argumentExpression.GetLocation(),
-										messageArgs: new[] { baseName + "." + methodName, RadianString }));
-								}
-							}
-						}
+						RadianValueAnalyze(context, invocation, 0, baseName + "." + methodName);
 						return;
 
 					// Matrix? or Matrix?x$(? or $ is 3 or 4)
 					case nameof(Matrix3.CreateFromAxisAngle):
 					// Matrix4
 					case nameof(Matrix4.Rotate):
-						{
-							// number is in second argument
-							var argumentExpression = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression;
-							if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
-							{
-								// radian value usually under 2PI
-								if (Math.Abs(result) >= 2 * Math.PI)
-								{
-									context.ReportDiagnostic(Diagnostic.Create(
-										descriptor: WarningRule,
-										location: argumentExpression.GetLocation(),
-										messageArgs: new[] { baseName + "." + methodName, RadianString }));
-								}
-							}
-						}
+						// number is in second argument
+						RadianValueAnalyze(context, invocation, 1, baseName + "." + methodName);
 						return;
 				}
 
-				// Matrix? or Matrix?x$(? or $ is 3 or 4)
+				// Matrix? or Matrix?x$ Matrix?d Matrix?x$d(? or $ is 3 or 4)
 				// CreateRotationX, CreateRotationY, CreateRotationZ
 				if (methodName.StartsWith("CreateRotation") ||
 					// Matrix4
 					// RotateX, RotateY, RotateZ
 					methodName.StartsWith("Rotate"))
 				{
-					var argumentExpression = invotation.ArgumentList.Arguments.First().Expression;
-					if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
-					{
-						// radian value usually under 2PI
-						if (Math.Abs(result) >= 2 * Math.PI)
-						{
-							context.ReportDiagnostic(Diagnostic.Create(
-								descriptor: WarningRule,
-								location: argumentExpression.GetLocation(),
-								messageArgs: new[] { baseName + "." + methodName, RadianString }));
-						}
-					}
-					return;
+					RadianValueAnalyze(context, invocation, 0, baseName + "." + methodName);
 				}
 				return;
 			}
 
-			// Quartanion
+			// Quartanion, Quartaniond
 			if (baseName.StartsWith(nameof(Quaternion)))
 			{
-				var methodName = invotation.Expression.GetLastToken().ValueText;
+				var methodName = invocation.Expression.GetLastToken().ValueText;
 				if (methodName == nameof(Quaternion.FromAxisAngle))
 				{
 					// number is in second argument
-					var argumentExpression = invotation.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.Expression;
-					if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
-					{
-						// radian value usually under 2PI
-						if (Math.Abs(result) >= 2 * Math.PI)
-						{
-							context.ReportDiagnostic(Diagnostic.Create(
-								descriptor: WarningRule,
-								location: argumentExpression.GetLocation(),
-								messageArgs: new[] { baseName + "." + methodName, RadianString }));
-						}
-					}
+					RadianValueAnalyze(context, invocation, 1, baseName + "." + nameof(Quaternion.FromAxisAngle));
+				}
+			}
+		}
+
+		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
+		{
+			double result;
+			var argumentExpression = invocation.ArgumentList.Arguments.Skip(argumentIndex).FirstOrDefault()?.Expression;
+			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			{
+				// perhaps degree value under 2PI is incorrect
+				if (Math.Abs(result) <= 2 * Math.PI)
+				{
+					context.ReportDiagnostic(Diagnostic.Create(
+						descriptor: InfoRule,
+						location: argumentExpression.GetLocation(),
+						messageArgs: new[] { methodName, "degree" }));
+				}
+			}
+		}
+
+		private static void RadianValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
+		{
+			double result;
+			var argumentExpression = invocation.ArgumentList.Arguments.Skip(argumentIndex).FirstOrDefault()?.Expression;
+			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			{
+				// radian value usually under 2PI
+				if (Math.Abs(result) >= 2 * Math.PI)
+				{
+					context.ReportDiagnostic(Diagnostic.Create(
+						descriptor: WarningRule,
+						location: argumentExpression.GetLocation(),
+						messageArgs: new[] { methodName, "radian" }));
 				}
 			}
 		}
