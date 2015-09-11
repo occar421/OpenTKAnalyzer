@@ -147,10 +147,7 @@ namespace OpenTKAnalyzer.Utility.Tests
 						var result = NumericValueParser.ParseFromExpressionInt(expression);
 						Assert.Fail($"incorrect result : {result} | parse mistakenly passed on \"{expression.ToFullString()}\"");
 					}
-					catch (FormatException ex)
-					{
-						// ok
-					}
+					catch (FormatException) { } // ok
 				}
 			}
 		}
