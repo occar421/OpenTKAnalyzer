@@ -78,42 +78,42 @@ class Class1
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "Generated buffer by this GL.GenBuffer is not used.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 3)
 				},
 				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "First argument must be 1 when second argument is variable of int or uint.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 17) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 17)
 				},
 				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers accepts larger than 0 value on 1st argument.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 17) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 17)
 				},
 				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.DeleteBuffer accepts variable.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 19) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 19)
 				},
 				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "First argument must be 1 when second argument is variable of int or uint.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 20) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 20)
 				},
 				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.DeleteBuffers accepts larger than 0 value on 1st argument.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 15, 20) }
+					Location = new DiagnosticResultLocation("Test0.cs", 15, 20)
 				});
 		}
 
@@ -162,70 +162,70 @@ class Class1
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"first\" is used generating but not deleting.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"second\" is used deleting but not generating.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"third\" is used in multiple GL.GenBuffers.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"third\" is used in multiple GL.GenBuffers.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"fourth\" is used in multiple GL.DeleteBuffers.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 18, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"fourth\" is used in multiple GL.DeleteBuffers.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 19, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 19, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"secondary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 24, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 24, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"secondary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 25, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 25, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"tertiary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 28, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 28, 3)
 				},
 				new DiagnosticResult()
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"tertiary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 29, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 29, 3)
 				});
 		}
 	}

@@ -85,35 +85,35 @@ class Class1
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.Ambient requires Color4, Vector4, int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 54) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 54)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.Position requires Vector4, int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 55) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 55)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.SpotExponent requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 59) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 59)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.SpotCutoff requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 57) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 57)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.ConstantAttenuation requires int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 66) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 66)
 				});
 		}
 
@@ -142,35 +142,35 @@ class Class1
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.Ambient requires Color4, Vector4, int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 39) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 39)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.Position requires Vector4, int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 40) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 40)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.SpotExponent requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 44) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 44)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.SpotCutoff requires int, float in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 42) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 42)
 				},
 				new DiagnosticResult()
 				{
 					Id = LightParamAnalyzer.DiagnosticId,
 					Message = "LightParameter.ConstantAttenuation requires int[], float[] in param(third argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 51) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 51)
 				});
 		}
 	}

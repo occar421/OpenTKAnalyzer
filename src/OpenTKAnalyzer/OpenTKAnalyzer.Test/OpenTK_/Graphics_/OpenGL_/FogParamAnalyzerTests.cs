@@ -99,56 +99,56 @@ class Class1
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogColor requires int[], float[] in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 33) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 33)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogIndex requires int, float in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 33) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 33)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 36) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 36)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 41) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 41)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 41) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 41)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 32) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 32)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 37) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 37)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 37) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 37)
 				});
 		}
 
@@ -178,56 +178,56 @@ class Class1
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogColor requires int[], float[] in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 20) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 20)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogIndex requires int, float in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 20) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 20)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 23) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 23)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 28) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 28)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 28) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 28)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 32) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 32)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 37) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 37)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 37) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 37)
 				});
 		}
 
@@ -257,56 +257,56 @@ class Class1
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogColor requires int[], float[] in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 33) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 33)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogIndex requires int, float in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 33) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 33)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 36) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 36)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 41) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 41)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogCoordSrc requires int casted FogMode.FogCoord, FogMode.FragmentDepth in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 41) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 41)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 32) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 32)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 13, 37) }
+					Location = new DiagnosticResultLocation("Test0.cs", 13, 37)
 				},
 				new DiagnosticResult()
 				{
 					Id = FogParamAnalyzer.DiagnosticId,
 					Message = "FogParameter.FogMode requires int casted FogMode.Linear, FogMode.Exp, FogMode.Exp2 in param(second argument).",
 					Severity = DiagnosticSeverity.Error,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 37) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 37)
 				});
 		}
 	}
