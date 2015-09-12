@@ -188,7 +188,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var delete in deleteOps)
 					{
-						var variableName = key.Split('.').Last();
+						var variableName = Identifier.GetSimpleName(key);
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: LackGenBuffersRule,
 							location: delete.Item1.GetLocation(),
@@ -200,7 +200,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var gen in genOps)
 					{
-						var variableName = key.Split('.').Last();
+						var variableName = Identifier.GetSimpleName(key);
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: LackDeleteBuffersRule,
 							location: gen.Item1.GetLocation(),
@@ -213,7 +213,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var gen in genOps)
 					{
-						var variableName = key.Split('.').Last();
+						var variableName = Identifier.GetSimpleName(key);
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: DuplexBuffersRule,
 							location: gen.Item1.GetLocation(),
@@ -225,7 +225,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					foreach (var delete in deleteOps)
 					{
-						var variableName = key.Split('.').Last();
+						var variableName = Identifier.GetSimpleName(key);
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: DuplexBuffersRule,
 							location: delete.Item1.GetLocation(),
@@ -246,7 +246,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				{
 					if (genOp.Item2.Value != deleteOp.Item2.Value)
 					{
-						var variableName = key.Split('.').Last();
+						var variableName = Identifier.GetSimpleName(key);
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: GenDeleteNumberOfBuffersRule,
 							location: genOp.Item1.GetLocation(),
@@ -260,7 +260,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				// one is constant and another is variable so this usually wrong
 				else if (genOp.Item2.HasValue || deleteOp.Item2.HasValue)
 				{
-					var variableName = key.Split('.').Last();
+					var variableName = Identifier.GetSimpleName(key);
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: GenDeleteNumberOfBuffersRule,
 						location: genOp.Item1.GetLocation(),

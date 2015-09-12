@@ -79,7 +79,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: TargetRule,
 							location: invocation.GetLocation(),
-							messageArgs: new[] { group.Key.Split('.').Last(), string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
+							messageArgs: new[] { Identifier.GetSimpleName(group.Key), string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
 					}
 				}
 			}
