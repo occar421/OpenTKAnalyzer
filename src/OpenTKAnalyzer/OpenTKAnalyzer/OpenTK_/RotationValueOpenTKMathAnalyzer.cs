@@ -123,12 +123,13 @@ namespace OpenTKAnalyzer.OpenTK_
 
 		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
 		{
-			double result;
-			var argumentExpression = invocation.ArgumentList.Arguments.Skip(argumentIndex).FirstOrDefault()?.Expression;
-			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			double value;
+			var argumentExpression = invocation.GetNthArgumentExpression(argumentIndex);
+			var result = context.SemanticModel.GetConstantValue(argumentExpression);
+			if (double.TryParse(result.Value?.ToString(), out value))
 			{
 				// perhaps degree value under 2PI is incorrect
-				if (Math.Abs(result) <= 2 * Math.PI)
+				if (Math.Abs(value) <= 2 * Math.PI)
 				{
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: NotDegreeRule,
@@ -140,12 +141,13 @@ namespace OpenTKAnalyzer.OpenTK_
 
 		private static void RadianValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
 		{
-			double result;
-			var argumentExpression = invocation.ArgumentList.Arguments.Skip(argumentIndex).FirstOrDefault()?.Expression;
-			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			double value;
+			var argumentExpression = invocation.GetNthArgumentExpression(argumentIndex);
+			var result = context.SemanticModel.GetConstantValue(argumentExpression);
+			if (double.TryParse(result.Value?.ToString(), out value))
 			{
 				// radian value usually under 2PI
-				if (Math.Abs(result) >= 2 * Math.PI)
+				if (Math.Abs(value) >= 2 * Math.PI)
 				{
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: NotRadianRule,
