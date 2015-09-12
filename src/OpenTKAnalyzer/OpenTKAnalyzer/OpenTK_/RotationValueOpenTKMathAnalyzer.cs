@@ -124,7 +124,7 @@ namespace OpenTKAnalyzer.OpenTK_
 		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
 		{
 			double value;
-			var argumentExpression = invocation.GetNthArgumentExpression(argumentIndex);
+			var argumentExpression = invocation.GetArgumentExpressionAt(argumentIndex);
 			var result = context.SemanticModel.GetConstantValue(argumentExpression);
 			if (double.TryParse(result.Value?.ToString(), out value))
 			{
@@ -142,7 +142,7 @@ namespace OpenTKAnalyzer.OpenTK_
 		private static void RadianValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
 		{
 			double value;
-			var argumentExpression = invocation.GetNthArgumentExpression(argumentIndex);
+			var argumentExpression = invocation.GetArgumentExpressionAt(argumentIndex);
 			var result = context.SemanticModel.GetConstantValue(argumentExpression);
 			if (double.TryParse(result.Value?.ToString(), out value))
 			{

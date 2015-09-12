@@ -42,13 +42,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var root = await context.SemanticModel.SyntaxTree.GetRootAsync();
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var lights = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.Light));
+			var lights = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.Light));
 
 			foreach (var lightOp in lights)
 			{
 				if (lightOp.ArgumentList.Arguments.Count == 3)
 				{
-					var secondExpression = lightOp.GetNthArgumentExpression(1);
+					var secondExpression = lightOp.GetArgumentExpressionAt(1);
 					if (secondExpression == null)
 					{
 						continue;
@@ -62,7 +62,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					LightParameter secondEnum;
 					if (Enum.TryParse(secondSymbol.Name, out secondEnum))
 					{
-						var thirdExpression = lightOp.GetNthArgumentExpression(2);
+						var thirdExpression = lightOp.GetArgumentExpressionAt(2);
 						if (thirdExpression == null)
 						{
 							continue;

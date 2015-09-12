@@ -55,10 +55,10 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var bindBuffers = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.BindBuffer));
+			var bindBuffers = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.BindBuffer));
 
 			var syntaxValidBinds = bindBuffers.Where(b => b.ArgumentList.Arguments.Count == 2);
-			var constantInvalidBinds = syntaxValidBinds.Select(b => b.GetNthArgumentExpression(1))
+			var constantInvalidBinds = syntaxValidBinds.Select(b => b.GetArgumentExpressionAt(1))
 				.Where(e => { var constant = context.SemanticModel.GetConstantValue(e); return constant.HasValue && !constant.Value.Equals(0); }); // null(not constant) or 0 are valid so be false
 			foreach (var bindLiteral in constantInvalidBinds)
 			{
@@ -67,11 +67,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: bindLiteral.GetLocation()));
 			}
 
-			var variableBindGroups = syntaxValidBinds.GroupBy(b => Identifier.GetVariableString(b.GetNthArgumentExpression(1), context.SemanticModel))
+			var variableBindGroups = syntaxValidBinds.GroupBy(b => Identifier.GetVariableString(b.GetArgumentExpressionAt(1), context.SemanticModel))
 				.Where(g => !string.IsNullOrEmpty(g.Key)); // <- constant on second argument
 			foreach (var group in variableBindGroups)
 			{
-				var targets = group.GroupBy(b => context.SemanticModel.GetSymbolInfo(b.GetNthArgumentExpression(0))).Where(t => t.Key.Symbol != null);
+				var targets = group.GroupBy(b => context.SemanticModel.GetSymbolInfo(b.GetArgumentExpressionAt(0))).Where(t => t.Key.Symbol != null);
 				if (targets.Skip(1).Any())
 				{
 					foreach (var invocation in group)

@@ -36,38 +36,38 @@ namespace OpenTKAnalyzer.Utility.Tests
 			[ExpectedException(typeof(ArgumentOutOfRangeException))]
 			public void NullAndMinus()
 			{
-				InvocationExt.GetNthArgumentExpression(null, -1);
+				InvocationExt.GetArgumentExpressionAt(null, -1);
 			}
 
 			[TestMethod]
 			public void InvocationNull()
 			{
-				Assert.AreEqual(null, InvocationExt.GetNthArgumentExpression(null, 0));
+				Assert.AreEqual(null, InvocationExt.GetArgumentExpressionAt(null, 0));
 			}
 
 			[TestMethod]
 			public void TakeArguments()
 			{
-				var first = invocation.GetNthArgumentExpression(0);
+				var first = invocation.GetArgumentExpressionAt(0);
 				Assert.AreEqual("str", (first as LiteralExpressionSyntax)?.Token.ValueText);
 
-				var second = invocation.GetNthArgumentExpression(1);
+				var second = invocation.GetArgumentExpressionAt(1);
 				Assert.AreEqual("1", (second as LiteralExpressionSyntax)?.Token.ValueText);
 
-				var third = invocation.GetNthArgumentExpression(2);
+				var third = invocation.GetArgumentExpressionAt(2);
 				Assert.AreEqual("2", (third as LiteralExpressionSyntax)?.Token.ValueText);
 
-				var fourth = invocation.GetNthArgumentExpression(3);
+				var fourth = invocation.GetArgumentExpressionAt(3);
 				Assert.AreEqual("3", (fourth as LiteralExpressionSyntax)?.Token.ValueText);
 
-				var fifth = invocation.GetNthArgumentExpression(4);
+				var fifth = invocation.GetArgumentExpressionAt(4);
 				Assert.AreEqual("4", (fifth as LiteralExpressionSyntax)?.Token.ValueText);
 			}
 
 			[TestMethod]
 			public void OutOfRangeIncorrectScenario()
 			{
-				var sixth = invocation.GetNthArgumentExpression(5);
+				var sixth = invocation.GetArgumentExpressionAt(5);
 				Assert.AreEqual(null, sixth);
 			}
 		}

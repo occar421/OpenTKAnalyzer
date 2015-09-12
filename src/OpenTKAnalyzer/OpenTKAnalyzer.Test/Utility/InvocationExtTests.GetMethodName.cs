@@ -39,15 +39,15 @@ class Class1
 			[ExpectedException(typeof(ArgumentNullException))]
 			public void Null()
 			{
-				InvocationExt.GetMethodName(null);
+				InvocationExt.GetMethodCallingName(null);
 			}
 
 			[TestMethod]
 			public void NormalScenario()
 			{
-				Assert.AreEqual("ToString", invocations[0].GetMethodName());
-				Assert.AreEqual("Console.WriteLine", invocations[1].GetMethodName());
-				Assert.AreEqual("DateTime.Today.ToString", invocations[2].GetMethodName());
+				Assert.AreEqual("ToString", invocations[0].GetMethodCallingName());
+				Assert.AreEqual("Console.WriteLine", invocations[1].GetMethodCallingName());
+				Assert.AreEqual("DateTime.Today.ToString", invocations[2].GetMethodCallingName());
 			}
 		}
 	}

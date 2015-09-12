@@ -42,13 +42,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var root = await context.SemanticModel.SyntaxTree.GetRootAsync();
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var fogs = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.Fog));
+			var fogs = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.Fog));
 
 			foreach (var fogOp in fogs)
 			{
 				if (fogOp.ArgumentList.Arguments.Count == 2)
 				{
-					var firstExpression = fogOp.GetNthArgumentExpression(0);
+					var firstExpression = fogOp.GetArgumentExpressionAt(0);
 					if (firstExpression == null)
 					{
 						continue;
@@ -97,7 +97,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						// *special*
 						if (useFogMode)
 						{
-							var expression = fogOp.GetNthArgumentExpression(1);
+							var expression = fogOp.GetArgumentExpressionAt(1);
 							var castExpression = expression as CastExpressionSyntax;
 
 							Location location = expression.GetLocation();
@@ -126,7 +126,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						}
 						else
 						{
-							var secondExpression = fogOp.GetNthArgumentExpression(1);
+							var secondExpression = fogOp.GetArgumentExpressionAt(1);
 							if (secondExpression == null)
 							{
 								continue;

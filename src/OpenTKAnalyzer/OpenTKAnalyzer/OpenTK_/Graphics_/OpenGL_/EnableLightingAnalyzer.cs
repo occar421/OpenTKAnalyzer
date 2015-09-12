@@ -42,7 +42,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var root = await context.SemanticModel.SyntaxTree.GetRootAsync();
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var lights = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.Light));
+			var lights = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.Light));
 			var useLights = new bool[8];
 			var lightLocations = new List<Location>[8];
 			for (int i = 0; i < lightLocations.Length; i++)
@@ -51,7 +51,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 			foreach (var lightOp in lights)
 			{
-				var expression = lightOp.GetNthArgumentExpression(0);
+				var expression = lightOp.GetArgumentExpressionAt(0);
 				if (expression == null)
 				{
 					continue;
@@ -74,13 +74,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 
 			// need light enabling
-			var enables = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.Enable));
+			var enables = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.Enable));
 			var enableLights = new bool[8];
 			var enableWholeLighting = false;
 			var enableLocations = new List<Location>();
 			foreach (var enableOp in enables)
 			{
-				var expression = enableOp.GetNthArgumentExpression(0);
+				var expression = enableOp.GetArgumentExpressionAt(0);
 				if (expression == null)
 				{
 					continue;

@@ -117,7 +117,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
 			// check for GL.GenBuffer (single one)
-			var genBufferOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.GenBuffer));
+			var genBufferOps = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.GenBuffer));
 			var notUsedGenBufferOps = genBufferOps.Where(g => !g.Parent.IsKind(SyntaxKind.SimpleAssignmentExpression) && !g.Parent.IsKind(SyntaxKind.EqualsValueClause));
 			foreach (var genOp in notUsedGenBufferOps)
 			{
@@ -127,48 +127,48 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			}
 
 			// check for GL.GenBuffers (multiple one)
-			var genBuffersOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.GenBuffers));
+			var genBuffersOps = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.GenBuffers));
 			var firstArgConstGenBuffersOps = GetFirstArgConstInt(genBuffersOps);
 			foreach (var genOp in FindNonNatural(firstArgConstGenBuffersOps))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: BuffersNumberRule,
-					location: genOp.GetNthArgumentExpression(0).GetLocation(),
+					location: genOp.GetArgumentExpressionAt(0).GetLocation(),
 					messageArgs: nameof(GL) + "." + nameof(GL.GenBuffers)));
 			}
 			foreach (var genOp in FindNotOneInvalid(firstArgConstGenBuffersOps))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: GenDeleteOneBufferRule,
-					location: genOp.GetNthArgumentExpression(0).GetLocation()));
+					location: genOp.GetArgumentExpressionAt(0).GetLocation()));
 			}
 
 			// check for GL.DeleteBuffer (single one)
-			var deleteBufferOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
+			var deleteBufferOps = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.DeleteBuffer));
 			var invalidDeleteBufferOps = GetFirstArgConstInt(deleteBufferOps).Where(o => o.Item2.HasValue);
 			foreach (var deleteLiteral in invalidDeleteBufferOps)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: NoConstantRule,
-					location: deleteLiteral.Item1.GetNthArgumentExpression(0).GetLocation(),
+					location: deleteLiteral.Item1.GetArgumentExpressionAt(0).GetLocation(),
 					messageArgs: nameof(GL) + "." + nameof(GL.DeleteBuffer)));
 			}
 
 			// check for GL.DeleteBuffers (multiple one)
-			var deleteBuffersOps = invocations.Where(i => i.GetMethodName() == nameof(GL) + "." + nameof(GL.DeleteBuffers));
+			var deleteBuffersOps = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.DeleteBuffers));
 			var firstArgConstDeleteBuffersOps = GetFirstArgConstInt(deleteBuffersOps);
 			foreach (var deleteOp in FindNonNatural(firstArgConstDeleteBuffersOps))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: BuffersNumberRule,
-					location: deleteOp.GetNthArgumentExpression(0).GetLocation(),
+					location: deleteOp.GetArgumentExpressionAt(0).GetLocation(),
 					messageArgs: nameof(GL) + "." + nameof(GL.DeleteBuffers)));
 			}
 			foreach (var deleteOp in FindNotOneInvalid(firstArgConstDeleteBuffersOps))
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
 					descriptor: GenDeleteOneBufferRule,
-					location: deleteOp.GetNthArgumentExpression(0).GetLocation()));
+					location: deleteOp.GetArgumentExpressionAt(0).GetLocation()));
 			}
 
 			// GL.GenBuffers and GL.DeleteBuffers complex inspection
@@ -275,7 +275,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 		private static IEnumerable<Tuple<InvocationExpressionSyntax, int?>> GetFirstArgConstInt(IEnumerable<InvocationExpressionSyntax> invocations)
 		{
-			return invocations.Select(g => Tuple.Create(g, NumericValueParser.ParseFromExpressionIntOrNull(g.GetNthArgumentExpression(0))));
+			return invocations.Select(g => Tuple.Create(g, NumericValueParser.ParseFromExpressionIntOrNull(g.GetArgumentExpressionAt(0))));
 		}
 
 		private static IEnumerable<InvocationExpressionSyntax> FindNonNatural(IEnumerable<Tuple<InvocationExpressionSyntax, int?>> ops)
@@ -285,14 +285,14 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 		private static IEnumerable<InvocationExpressionSyntax> FindNotOneInvalid(IEnumerable<Tuple<InvocationExpressionSyntax, int?>> ops)
 		{
-			return ops.Where(o => { var keyword = (o.Item1.GetNthArgumentExpression(1)?.Parent as ArgumentSyntax)?.RefOrOutKeyword; return keyword.HasValue && !keyword.Value.IsKind(SyntaxKind.None); })
+			return ops.Where(o => { var keyword = (o.Item1.GetArgumentExpressionAt(1)?.Parent as ArgumentSyntax)?.RefOrOutKeyword; return keyword.HasValue && !keyword.Value.IsKind(SyntaxKind.None); })
 				.Where(o => o.Item2.HasValue && o.Item2.Value != 1)
 				.Select(o => o.Item1);
 		}
 
 		private static IEnumerable<IGrouping<string, Tuple<InvocationExpressionSyntax, int?>>> GroupByVariableName(IEnumerable<Tuple<InvocationExpressionSyntax, int?>> ops, SemanticModel semanticModel)
 		{
-			return ops.Select(o => new { Invocation = o.Item1, Const = o.Item2, Id = Identifier.GetVariableString(o.Item1.GetNthArgumentExpression(1), semanticModel) })
+			return ops.Select(o => new { Invocation = o.Item1, Const = o.Item2, Id = Identifier.GetVariableString(o.Item1.GetArgumentExpressionAt(1), semanticModel) })
 				.Where(o => !string.IsNullOrEmpty(o.Id))
 				.GroupBy(g => g.Id, e => Tuple.Create(e.Invocation, e.Const));
 		}

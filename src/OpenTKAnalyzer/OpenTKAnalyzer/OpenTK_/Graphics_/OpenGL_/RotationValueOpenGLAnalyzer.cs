@@ -60,7 +60,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
 		{
 			double value;
-			var argumentExpression = invocation.GetNthArgumentExpression(0);
+			var argumentExpression = invocation.GetArgumentExpressionAt(0);
 			var result = context.SemanticModel.GetConstantValue(argumentExpression);
 			if (double.TryParse(result.Value?.ToString(), out value))
 			{
