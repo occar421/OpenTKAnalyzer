@@ -120,6 +120,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper\DiagnosticResultLocation.cs" />
     <Compile Include="TestHelper\DiagnosticVerifier.cs" />
+    <Compile Include="Utility\IdentifierTests.GetSimpleName.cs" />
     <Compile Include="Utility\IdentifierTests.GetVariableString.cs" />
     <Compile Include="Utility\InvocationExtTests.GetNthArgumentExpression.cs" />
     <Compile Include="Utility\InvocationExtTests.GetMethodName.cs" />

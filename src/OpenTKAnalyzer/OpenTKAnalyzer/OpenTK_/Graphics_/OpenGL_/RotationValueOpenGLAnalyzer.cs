@@ -59,12 +59,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation)
 		{
-			double result;
-			var argumentExpression = invocation.ArgumentList.Arguments.FirstOrDefault()?.Expression;
-			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			double value;
+			var argumentExpression = invocation.GetArgumentExpressionAt(0);
+			var result = context.SemanticModel.GetConstantValue(argumentExpression);
+			if (double.TryParse(result.Value?.ToString(), out value))
 			{
 				// perhaps degree value under 2PI is incorrect
-				if (Math.Abs(result) <= 2 * Math.PI)
+				if (Math.Abs(value) <= 2 * Math.PI)
 				{
 					context.ReportDiagnostic(Diagnostic.Create(
 						descriptor: Rule,

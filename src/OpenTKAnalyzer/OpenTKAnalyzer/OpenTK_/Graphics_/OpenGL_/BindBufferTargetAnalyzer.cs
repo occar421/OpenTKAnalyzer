@@ -55,11 +55,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var bindBuffers = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.BindBuffer));
+			var bindBuffers = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.BindBuffer));
 
 			var syntaxValidBinds = bindBuffers.Where(b => b.ArgumentList.Arguments.Count == 2);
-			var constantInvalidBinds = syntaxValidBinds.Select(b => b.ArgumentList.Arguments.Last().Expression)
-				.Where(e => { var r = NumericValueParser.ParseFromExpressionIntOrNull(e); return r.HasValue && r.Value != 0; }); // null(not constant) or 0 are valid so be false
+			var constantInvalidBinds = syntaxValidBinds.Select(b => b.GetArgumentExpressionAt(1))
+				.Where(e => { var constant = context.SemanticModel.GetConstantValue(e); return constant.HasValue && !constant.Value.Equals(0); }); // null(not constant) or 0 are valid so be false
 			foreach (var bindLiteral in constantInvalidBinds)
 			{
 				context.ReportDiagnostic(Diagnostic.Create(
@@ -67,52 +67,21 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 					location: bindLiteral.GetLocation()));
 			}
 
-			var variableBindGroups = syntaxValidBinds.Select(b => b.ArgumentList)
-				.GroupBy(arg => GetIdentifyString(arg.Arguments.Last().Expression, context.SemanticModel))
+			var variableBindGroups = syntaxValidBinds.GroupBy(b => Identifier.GetVariableString(b.GetArgumentExpressionAt(1), context.SemanticModel))
 				.Where(g => !string.IsNullOrEmpty(g.Key)); // <- constant on second argument
 			foreach (var group in variableBindGroups)
 			{
-				var targets = group.GroupBy(g => context.SemanticModel.GetSymbolInfo(g.Arguments.First().Expression)).Where(t => t.Key.Symbol != null);
-				if (targets.Count() >= 2)
+				var targets = group.GroupBy(b => context.SemanticModel.GetSymbolInfo(b.GetArgumentExpressionAt(0))).Where(t => t.Key.Symbol != null);
+				if (targets.Skip(1).Any())
 				{
-					foreach (var invocation in group.Select(i => i.Parent))
+					foreach (var invocation in group)
 					{
 						context.ReportDiagnostic(Diagnostic.Create(
 							descriptor: TargetRule,
 							location: invocation.GetLocation(),
-							messageArgs: new[] { group.Key.Split('.').Last(), string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
+							messageArgs: new[] { Identifier.GetSimpleName(group.Key), string.Join(", ", targets.Select(t => nameof(BufferTarget) + "." + t.Key.Symbol.Name)) }));
 					}
 				}
-			}
-		}
-
-		private static string GetIdentifyString(SyntaxNode node, SemanticModel semanticModel)
-		{
-			if (node is ElementAccessExpressionSyntax)
-			{
-				var identifierSymbol = semanticModel.GetSymbolInfo(node.ChildNodes().First()).Symbol;
-				var index = node.ChildNodes().Skip(1).FirstOrDefault()?.WithoutTrivia();
-				return identifierSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) + index.ToFullString();
-			}
-			if (node is BinaryExpressionSyntax)
-			{
-				return null;
-			}
-			if (node is PostfixUnaryExpressionSyntax)
-			{
-				return null;
-			}
-			if (NumericValueParser.ParseFromExpressionDoubleOrNull(node as ExpressionSyntax).HasValue) // constant
-			{
-				return null;
-			}
-			if (node is PrefixUnaryExpressionSyntax)
-			{
-				return null;
-			}
-			else
-			{
-				return semanticModel.GetSymbolInfo(node).Symbol?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 			}
 		}
 	}

@@ -88,5 +88,15 @@ namespace OpenTKAnalyzer.Utility
 				suffix = node.ArgumentList.WithoutTrivia().ToFullString() + suffix;
 			}
 		}
+
+		/// <summary>
+		/// Get simple name of identity string
+		/// </summary>
+		/// <param name="identityString">identity string from <see cref="GetSimpleName(string)"/></param>
+		/// <returns>simple name</returns>
+		static public string GetSimpleName(string identityString)
+		{
+			return identityString?.Split('.').LastOrDefault();
+		}
 	}
 }

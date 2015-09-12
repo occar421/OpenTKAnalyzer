@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using OpenTK.Graphics.OpenGL;
-
+using OpenTKAnalyzer.Utility;
 
 namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 {
@@ -42,13 +42,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 			var root = await context.SemanticModel.SyntaxTree.GetRootAsync();
 			var invocations = root.DescendantNodes().OfType<InvocationExpressionSyntax>();
 
-			var fogs = invocations.Where(i => i.Expression.WithoutTrivia().ToFullString() == nameof(GL) + "." + nameof(GL.Fog));
+			var fogs = invocations.Where(i => i.GetMethodCallingName() == nameof(GL) + "." + nameof(GL.Fog));
 
 			foreach (var fogOp in fogs)
 			{
 				if (fogOp.ArgumentList.Arguments.Count == 2)
 				{
-					var firstExpression = fogOp.ArgumentList.Arguments.FirstOrDefault()?.ChildNodes()?.First();
+					var firstExpression = fogOp.GetArgumentExpressionAt(0);
 					if (firstExpression == null)
 					{
 						continue;
@@ -97,13 +97,13 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						// *special*
 						if (useFogMode)
 						{
-							var argumentExpression = fogOp.ArgumentList.Arguments.Skip(1).FirstOrDefault();
-							var castExpression = argumentExpression?.ChildNodes()?.FirstOrDefault();
+							var expression = fogOp.GetArgumentExpressionAt(1);
+							var castExpression = expression as CastExpressionSyntax;
 
-							Location location = castExpression.GetLocation();
-							if (castExpression.IsKind(SyntaxKind.CastExpression) && castExpression.ChildNodes().FirstOrDefault()?.ToFullString() == "int")
+							Location location = expression.GetLocation();
+							if (castExpression != null && castExpression.Type.ToFullString() == "int")
 							{
-								var insideExpression = argumentExpression?.ChildNodes()?.FirstOrDefault()?.ChildNodes().Last();
+								var insideExpression = castExpression.Expression;
 								if (insideExpression == null)
 								{
 									continue;
@@ -112,7 +112,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 								var typeInfo = context.SemanticModel.GetTypeInfo(insideExpression);
 								if (typeInfo.Type?.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat) == nameof(FogMode))
 								{
-                                    var elementName = insideExpression.DescendantNodesAndSelf().LastOrDefault()?.ToFullString();
+									var elementName = insideExpression.DescendantNodesAndSelf().LastOrDefault()?.ToFullString();
 									if (correctTypeNames.Any(n => n == elementName))
 									{
 										continue;
@@ -126,7 +126,7 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 						}
 						else
 						{
-							var secondExpression = fogOp.ArgumentList.Arguments.Skip(1).FirstOrDefault()?.ChildNodes()?.First();
+							var secondExpression = fogOp.GetArgumentExpressionAt(1);
 							if (secondExpression == null)
 							{
 								continue;

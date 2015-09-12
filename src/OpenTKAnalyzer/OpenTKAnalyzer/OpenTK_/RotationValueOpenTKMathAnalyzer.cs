@@ -19,28 +19,29 @@ namespace OpenTKAnalyzer.OpenTK_
 		public const string DiagnosticId = "RotatinoValueOpenTKMath";
 
 		private const string Title = "Rotation value(OpenTK Math)";
-		private const string MessageFormat = "{0} accepts {1} value.";
+		private const string NotRadianMessageFormat = "{0} accepts radian value.";
+		private const string NotDegreeMessageFormat = "{0} accepts degree value.";
 		private const string Description = "Warm on literal in argument seems invalid style(radian or degree).";
 		private const string Category = nameof(OpenTKAnalyzer) + ":" + nameof(OpenTK);
 
-		internal static DiagnosticDescriptor WarningRule = new DiagnosticDescriptor(
+		internal static DiagnosticDescriptor NotRadianRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: MessageFormat,
+			messageFormat: NotRadianMessageFormat,
 			category: Category,
 			defaultSeverity: DiagnosticSeverity.Warning,
 			isEnabledByDefault: true,
 			description: Description);
-		internal static DiagnosticDescriptor InfoRule = new DiagnosticDescriptor(
+		internal static DiagnosticDescriptor NotDegreeRule = new DiagnosticDescriptor(
 			id: DiagnosticId,
 			title: Title,
-			messageFormat: MessageFormat,
+			messageFormat: NotDegreeMessageFormat,
 			category: Category,
 			defaultSeverity: DiagnosticSeverity.Info,
 			isEnabledByDefault: true,
 			description: Description);
 
-		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(WarningRule, InfoRule);
+		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(NotRadianRule, NotDegreeRule);
 
 		public override void Initialize(AnalysisContext context)
 		{
@@ -122,34 +123,36 @@ namespace OpenTKAnalyzer.OpenTK_
 
 		private static void DegreeValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
 		{
-			double result;
-			var argumentExpression = invocation.ArgumentList.Arguments.Skip(argumentIndex).FirstOrDefault()?.Expression;
-			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			double value;
+			var argumentExpression = invocation.GetArgumentExpressionAt(argumentIndex);
+			var result = context.SemanticModel.GetConstantValue(argumentExpression);
+			if (double.TryParse(result.Value?.ToString(), out value))
 			{
 				// perhaps degree value under 2PI is incorrect
-				if (Math.Abs(result) <= 2 * Math.PI)
+				if (Math.Abs(value) <= 2 * Math.PI)
 				{
 					context.ReportDiagnostic(Diagnostic.Create(
-						descriptor: InfoRule,
+						descriptor: NotDegreeRule,
 						location: argumentExpression.GetLocation(),
-						messageArgs: new[] { methodName, "degree" }));
+						messageArgs: methodName));
 				}
 			}
 		}
 
 		private static void RadianValueAnalyze(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocation, int argumentIndex, string methodName)
 		{
-			double result;
-			var argumentExpression = invocation.ArgumentList.Arguments.Skip(argumentIndex).FirstOrDefault()?.Expression;
-			if (NumericValueParser.TryParseFromExpression(argumentExpression, out result))
+			double value;
+			var argumentExpression = invocation.GetArgumentExpressionAt(argumentIndex);
+			var result = context.SemanticModel.GetConstantValue(argumentExpression);
+			if (double.TryParse(result.Value?.ToString(), out value))
 			{
 				// radian value usually under 2PI
-				if (Math.Abs(result) >= 2 * Math.PI)
+				if (Math.Abs(value) >= 2 * Math.PI)
 				{
 					context.ReportDiagnostic(Diagnostic.Create(
-						descriptor: WarningRule,
+						descriptor: NotRadianRule,
 						location: argumentExpression.GetLocation(),
-						messageArgs: new[] { methodName, "radian" }));
+						messageArgs: methodName));
 				}
 			}
 		}

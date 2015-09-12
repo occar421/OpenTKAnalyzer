@@ -11,7 +11,7 @@ namespace OpenTKAnalyzer.Utility
 {
 	public static class InvocationExt
 	{
-		public static string GetMethodName(this InvocationExpressionSyntax invocation)
+		public static string GetMethodCallingName(this InvocationExpressionSyntax invocation)
 		{
 			if (invocation == null)
 			{
@@ -20,7 +20,7 @@ namespace OpenTKAnalyzer.Utility
 			return invocation.Expression.WithoutTrivia().ToFullString();
 		}
 
-		public static ExpressionSyntax GetNthArgumentExpression(this InvocationExpressionSyntax invocation, int n)
+		public static ExpressionSyntax GetArgumentExpressionAt(this InvocationExpressionSyntax invocation, int n)
 		{
 			if (n < 0)
 			{

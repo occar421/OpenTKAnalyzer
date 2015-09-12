@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -37,14 +38,6 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 		private static void Analyze(CodeBlockAnalysisContext context)
 		{
-			// filtering
-			if (context.CodeBlock.Ancestors().OfType<UsingDirectiveSyntax>()
-				.Where(u => u.Name.NormalizeWhitespace().ToFullString() ==
-					nameof(OpenTK) + "." + nameof(OpenTK.Graphics) + "." + nameof(OpenTK.Graphics.OpenGL)).Any())
-			{
-				return;
-			}
-
 			// block contains OpenTK.Graphics.OpenGL
 			var walker = new BlockWalker();
 			walker.Visit(context.CodeBlock);
@@ -60,19 +53,6 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 
 			private static IReadOnlyDictionary<string, int> router;
 			private static IReadOnlyList<string> reverseRouter;
-
-			private struct Pair
-			{
-				internal MemberAccessExpressionSyntax Syntax { get; }
-				internal string OperationName { get; }
-
-				public Pair(MemberAccessExpressionSyntax syntax, string name)
-				{
-					Syntax = syntax;
-					OperationName = name;
-				}
-			}
-
 			static BlockWalker()
 			{
 				var dictionaryBuilder = ImmutableDictionary.CreateBuilder<string, int>();
@@ -89,11 +69,11 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				router = dictionaryBuilder.ToImmutableDictionary();
 
 				var arrayBuilder = ImmutableArray.CreateBuilder<string>();
-				arrayBuilder.Add(nameof(GL.PushAttrib).Substring(4));
-				arrayBuilder.Add(nameof(GL.PushClientAttrib).Substring(4));
-				arrayBuilder.Add(nameof(GL.PushDebugGroup).Substring(4));
-				arrayBuilder.Add(nameof(GL.PushMatrix).Substring(4));
-				arrayBuilder.Add(nameof(GL.PushName).Substring(4));
+				arrayBuilder.Add("Attrib");
+				arrayBuilder.Add("ClientAttrib");
+				arrayBuilder.Add("DebugGroup");
+				arrayBuilder.Add("Matrix");
+				arrayBuilder.Add("Name");
 				reverseRouter = arrayBuilder.ToImmutableList();
 			}
 
@@ -103,13 +83,14 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				var invocations = statements.Select(s => s.Expression).OfType<InvocationExpressionSyntax>();
 				var glOperators = invocations.Select(i => i.Expression).OfType<MemberAccessExpressionSyntax>()
 					.Where(m => m.IsKind(SyntaxKind.SimpleMemberAccessExpression)).Where(s => s.GetFirstToken().Text == nameof(GL));
-				var pushPops = glOperators.Select(g => new Pair(g, g.ChildNodes().Skip(1).First().GetFirstToken().Text))
-					.Where(p => p.OperationName.StartsWith("Push") || p.OperationName.StartsWith("Pop"));
+				var pushPops = glOperators.Select(g => Tuple.Create(g.Parent as InvocationExpressionSyntax, g.ChildNodes().Skip(1).First().GetFirstToken().Text))
+					.Where(p => p.Item2.StartsWith("Push") || p.Item2.StartsWith("Pop"));
 
 				// filtering
 				if (!pushPops.Any())
 				{
 					base.VisitBlock(node);
+					return;
 				}
 
 				// block contains GL.Push???() or GL.Pop???
@@ -117,8 +98,8 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 				var prevPushLocations = new Location[reverseRouter.Count]; // new Location[5]
 				foreach (var pair in pushPops)
 				{
-					var route = router[pair.OperationName];
-					if (pair.OperationName.StartsWith("Push"))
+					var route = router[pair.Item2];
+					if (pair.Item2.StartsWith("Push"))
 					{
 						counters[route]++;
 						if (counters[route] > 1)
@@ -127,18 +108,18 @@ namespace OpenTKAnalyzer.OpenTK_.Graphics_.OpenGL_
 								descriptor: Rule,
 								location: prevPushLocations[route],
 								messageArgs: nameof(GL) + ".Pop" + reverseRouter[route]));
-							counters[router[pair.OperationName]] = 1;
+							counters[router[pair.Item2]] = 1;
 						}
-						prevPushLocations[route] = pair.Syntax.Parent.GetLocation();
+						prevPushLocations[route] = pair.Item1.GetLocation();
 					}
-					else if (pair.OperationName.StartsWith("Pop"))
+					else if (pair.Item2.StartsWith("Pop"))
 					{
 						counters[route]--;
 						if (counters[route] < 0)
 						{
 							Diagnostics.Add(Diagnostic.Create(
 								descriptor: Rule,
-								location: pair.Syntax.Parent.GetLocation(),
+								location: pair.Item1.GetLocation(),
 								messageArgs: nameof(GL) + ".Push" + reverseRouter[route]));
 							counters[route] = 0;
 						}
