@@ -105,12 +105,12 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Light0).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 3)
 				});
 		}
 
@@ -133,19 +133,19 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				});
 		}
 
@@ -169,12 +169,12 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Light0).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 3)
 				});
 		}
 
@@ -198,19 +198,19 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 3)
 				});
 		}
 
@@ -234,12 +234,12 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Light0).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 3)
 				});
 		}
 
@@ -263,19 +263,19 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 8, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 8, 3)
 				});
 		}
 	}

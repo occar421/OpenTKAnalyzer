@@ -107,6 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzerTests.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\FogParamAnalyzerTests.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\RotationValueOpenGLAnalyzerTests.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\BindBufferTargetAnalyzerTests.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\GenDeleteBufferAnalyzerTests.cs" />
     <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzerTests.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\PushPopAnalyzerTests.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzerTests.cs" />
@@ -116,6 +120,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelper\DiagnosticResultLocation.cs" />
     <Compile Include="TestHelper\DiagnosticVerifier.cs" />
+    <Compile Include="Utility\IdentifierTests.GetSimpleName.cs" />
+    <Compile Include="Utility\IdentifierTests.GetVariableString.cs" />
+    <Compile Include="Utility\InvocationExtTests.GetNthArgumentExpression.cs" />
+    <Compile Include="Utility\InvocationExtTests.GetMethodName.cs" />
+    <Compile Include="Utility\NumericValueParserTests.ParseInt.cs" />
+    <Compile Include="Utility\NumericValueParserTests.ParseDouble.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

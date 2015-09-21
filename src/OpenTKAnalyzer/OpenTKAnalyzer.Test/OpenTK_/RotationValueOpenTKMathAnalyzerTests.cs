@@ -69,54 +69,54 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "MathHelper.DegreesToRadians accepts degree value.",
 					Severity = DiagnosticSeverity.Info,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 31) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 31)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "MathHelper.RadiansToDegrees accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 31) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 31)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix2x3.CreateRotation accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 28) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 28)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix3.CreateFromAxisAngle accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 44) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 44)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix4d.CreateRotationY accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 28) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 28)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix4.Rotate accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 31) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 31)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Quaternion.FromAxisAngle accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 43) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 43)
 				});
 		}
 
@@ -171,54 +171,54 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "MathHelper.DegreesToRadians accepts degree value.",
 					Severity = DiagnosticSeverity.Info,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 31) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 31)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "MathHelper.RadiansToDegrees accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 7, 31) }
+					Location = new DiagnosticResultLocation("Test0.cs", 7, 31)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix2x3.CreateRotation accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 9, 28) }
+					Location = new DiagnosticResultLocation("Test0.cs", 9, 28)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix3.CreateFromAxisAngle accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 44) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 44)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix4d.CreateRotationY accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 11, 28) }
+					Location = new DiagnosticResultLocation("Test0.cs", 11, 28)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Matrix4.Rotate accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 12, 31) }
+					Location = new DiagnosticResultLocation("Test0.cs", 12, 31)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenTKMathAnalyzer.DiagnosticId,
 					Message = "Quaternion.FromAxisAngle accepts radian value.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 43) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 43)
 				});
 		}
 	}

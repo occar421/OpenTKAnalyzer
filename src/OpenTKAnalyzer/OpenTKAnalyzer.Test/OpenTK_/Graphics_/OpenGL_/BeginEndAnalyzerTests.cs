@@ -64,40 +64,40 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.End.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 6, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 6, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.Begin.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 10, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 10, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.End.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 14, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 14, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.Begin.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 17, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 17, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.Begin.",
 					Severity = DiagnosticSeverity.Warning,
-					Locations = new[] { new DiagnosticResultLocation("Test0.cs", 18, 3) }
+					Location = new DiagnosticResultLocation("Test0.cs", 18, 3)
 				});
 		}
 	}

@@ -31,11 +31,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="OpenTK_\Graphics_\OpenGL_\BeginEndAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\FogParamAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\RotationValueOpenGLAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\BindBufferTargetAnalyzer.cs" />
+    <Compile Include="OpenTK_\Graphics_\OpenGL_\GenDeleteBufferAnalyzer.cs" />
     <Compile Include="OpenTK_\RotationValueOpenTKMathAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\PushPopAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\EnableLightingAnalyzer.cs" />
     <Compile Include="OpenTK_\Graphics_\OpenGL_\LightParamAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\Identifier.cs" />
+    <Compile Include="Utility\InvocationExt.cs" />
+    <Compile Include="Utility\NumericValueParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagnostic.nuspec">

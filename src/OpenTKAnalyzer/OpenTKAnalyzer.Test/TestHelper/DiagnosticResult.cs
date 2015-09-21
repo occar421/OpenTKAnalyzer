@@ -7,18 +7,18 @@ namespace OpenTKAnalyzer.TestHelper
 	/// </summary>
 	public struct DiagnosticResult
 	{
-		private DiagnosticResultLocation[] locations;
-		public DiagnosticResultLocation[] Locations
+		public DiagnosticResultLocation Location
 		{
 			get
 			{
-				return (this.locations = this.locations ?? new DiagnosticResultLocation[] { });
+				return location.HasValue ? location.Value : (location = new DiagnosticResultLocation(Path, Line, Column)).Value;
 			}
 			set
 			{
-				this.locations = value;
+				location = value;
 			}
 		}
+		public DiagnosticResultLocation? location;
 
 		public DiagnosticSeverity Severity { get; set; }
 
@@ -26,10 +26,10 @@ namespace OpenTKAnalyzer.TestHelper
 
 		public string Message { get; set; }
 
-		public string Path => Locations.Length > 0 ? Locations[0].Path : string.Empty;
+		public string Path => location.HasValue ? location.Value.Path : string.Empty;
 
-		public int Line => Locations.Length > 0 ? Locations[0].Line : -1;
+		public int Line => location.HasValue ? location.Value.Line : -1;
 
-		public int Column => Locations.Length > 0 ? Locations[0].Column : -1;
+		public int Column => location.HasValue ? location.Value.Column : -1;
 	}
 }
