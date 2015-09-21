@@ -21,15 +21,23 @@ Currently, this contains analyzers below.
 ### 0.1.0-alpha
 + GL.Begin and GL.End comformity.
 + Prevent mistakes of degree value and radian value in OpenTK Math Library.
-+ GL.PushMatrix and GL.PopMatrix conformity. Other Push Pop functions are supported.
++ GL.PushMatrix and GL.PopMatrix conformity. Other Push Pop operators are also supported.
 + Check lighting enabling by GL.Enable.
 + Check GL.Light param(third argument) type is correct.
 
 ***0.1.1-alpha***
 + Fix bug on minus prefixed value. (Analyzer for OpenTK Math Library)
 
-## Versioning
-In appveyor.yml line 1, version is defined. And stage(alpha, beta or release) is line 3.
+### 0.2.0-alpha
++ Check GL.Fog param(second argument) type and enum field are correct.
++ Prevent mistakes of value in OpenGL library.
++ Check binding buffer operators of OpenGL.
++ Check OpenGL operators of generating and deleting buffer.
+
+Improve constant value checking process with Semantic Model.
+
+## Versioning etc.
+In appveyor.yml line 1, version is defined. And stage(alpha, beta or release) is on line 3. Relase Notes is on line 4.
 ### format
 <dl>
     <dt>nupkg</dt>
@@ -42,5 +50,5 @@ In appveyor.yml line 1, version is defined. And stage(alpha, beta or release) is
 Change them and NuGet's release note when we make release branch.
 
 ## Development Envirionment
-Visual Studio Community 2015 (on Windows 10 Pro)  
+Visual Studio Community 2015  
 Powered by AppVeyor, every pull request to develop branch is built automatically.
