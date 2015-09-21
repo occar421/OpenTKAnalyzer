@@ -48,14 +48,14 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenGLAnalyzer.DiagnosticId,
 					Message = "GL.Rotate accepts degree value.",
 					Severity = DiagnosticSeverity.Info,
 					Location = new DiagnosticResultLocation("Test0.cs", 6, 13)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = RotationValueOpenGLAnalyzer.DiagnosticId,
 					Message = "GL.Rotate accepts degree value.",

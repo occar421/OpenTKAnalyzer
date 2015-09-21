@@ -105,7 +105,7 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Light0).",
@@ -133,14 +133,14 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 6, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
@@ -169,7 +169,7 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Light0).",
@@ -198,14 +198,14 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
@@ -234,7 +234,7 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Light0).",
@@ -263,14 +263,14 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = EnableLightingAnalyzer.DiagnosticId,
 					Message = "Missing GL.Enable(EnableCap.Lighting).",

@@ -83,21 +83,21 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 7, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 12, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "GL.BindBuffer accepts variable or 0 on 2nd argument.",
@@ -127,21 +127,21 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 8, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "The variable \"buffer\" is used in multiple buffer targets (BufferTarget.ArrayBuffer, BufferTarget.ElementArrayBuffer).",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 13, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BindBufferTargetAnalyzer.DiagnosticId,
 					Message = "GL.BindBuffer accepts variable or 0 on 2nd argument.",

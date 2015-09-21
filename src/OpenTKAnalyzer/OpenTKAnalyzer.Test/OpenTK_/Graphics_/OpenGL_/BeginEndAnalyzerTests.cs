@@ -64,35 +64,35 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.End.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 6, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.Begin.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 10, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.End.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 14, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.Begin.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 17, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = BeginEndAnalyzer.DiagnosticId,
 					Message = "Missing GL.Begin.",

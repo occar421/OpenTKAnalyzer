@@ -157,70 +157,70 @@ class Class1
 }";
 
 			VerifyCSharpDiagnostic(test0Source,
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"first\" is used generating but not deleting.",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 9, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"second\" is used deleting but not generating.",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 11, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"third\" is used in multiple GL.GenBuffers.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 13, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"third\" is used in multiple GL.GenBuffers.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 14, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"fourth\" is used in multiple GL.DeleteBuffers.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 18, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "The variable \"fourth\" is used in multiple GL.DeleteBuffers.",
 					Severity = DiagnosticSeverity.Warning,
 					Location = new DiagnosticResultLocation("Test0.cs", 19, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"secondary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 24, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"secondary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 25, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"tertiary\" may have different number of buffer.",
 					Severity = DiagnosticSeverity.Error,
 					Location = new DiagnosticResultLocation("Test0.cs", 28, 3)
 				},
-				new DiagnosticResult()
+				new DiagnosticResult
 				{
 					Id = GenDeleteBufferAnalyzer.DiagnosticId,
 					Message = "GL.GenBuffers and GL.DeleteBuffers of the variable \"tertiary\" may have different number of buffer.",
