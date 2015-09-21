@@ -1,7 +1,7 @@
-version: 0.1.1.{build}
+version: 0.2.0.{build}
 environment:
   stage: alpha
-  release_notes: 'Fix bug of RetationValueOpenTKMath analyzer(not working with minus prefix).'
+  release_notes: 'Add FogParam, RotationValueOpenGL, BindBufferTarget, GenDeleteBuffer analyzers.'
   solution_path: src\OpenTKAnalyzer.sln
 pull_requests:
   do_not_increment_build_number: true
