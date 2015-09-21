@@ -8,7 +8,7 @@
 		<owners>MasuqaT.NET</owners>
 		<licenseUrl>https://github.com/occar421/OpenTKAnalyzer/blob/master/LICENSE</licenseUrl>
 		<projectUrl>https://github.com/occar421/OpenTKAnalyzer</projectUrl>
-		<!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+		<iconUrl>https://github.com/occar421/OpenTKAnalyzer/blob/master/misc/NugetIcon.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>Analyzer for OpenTK (unofficial)</description>
 		<releaseNotes>Placeholder</releaseNotes>
